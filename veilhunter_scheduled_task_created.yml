@@ -1,0 +1,28 @@
+title: VeilHunter - Scheduled Task Created with Suspicious Action
+id: c3d4e5f6-0003-4a6b-0c1d-2e3f4a5b6c7d
+status: experimental
+description: >
+  Detects the creation of a scheduled task where the action references a
+  LOLBin, an encoded PowerShell command, or a path in a user-writable
+  staging location. Mapped to T1053.005.
+references:
+  - https://attack.mitre.org/techniques/T1053/005/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.persistence
+  - attack.execution
+  - attack.t1053.005
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4698
+  filter_system_tasks:
+    TaskName|contains:
+      - '\Microsoft\Windows\'
+  condition: selection and not filter_system_tasks
+falsepositives:
+  - Legitimate third-party software scheduling tasks
+level: medium

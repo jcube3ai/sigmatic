@@ -1,0 +1,26 @@
+title: VeilHunter - AS-REP Roasting - Pre-Authentication Not Required
+id: e5f6a7b8-0105-4c8d-2e3f-fe5121d70105
+status: experimental
+description: >
+  Detects a Kerberos AS-REQ where pre-authentication is not required
+  (Pre-Authentication Type 0). This indicates an account has pre-auth
+  disabled and is vulnerable to AS-REP roasting (T1558.004).
+references:
+  - https://attack.mitre.org/techniques/T1558/004/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.credential_access
+  - attack.t1558.004
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4768
+    PreAuthType: '0'
+    Status: '0x0'
+  condition: selection
+falsepositives:
+  - Accounts intentionally configured without pre-auth (very rare, should be investigated)
+level: high

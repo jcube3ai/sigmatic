@@ -1,0 +1,24 @@
+title: VeilHunter - Windows System Event Log Cleared
+id: c1d2e3f4-0306-4a4b-8c9d-5c3787d70306
+status: experimental
+description: >
+  Detects clearing of the Windows System event log (EventID 104).
+  Paired with Security log clearing (1102), this indicates deliberate
+  forensic evidence removal (T1070.001).
+references:
+  - https://attack.mitre.org/techniques/T1070/001/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.defense_evasion
+  - attack.t1070.001
+logsource:
+  product: windows
+  service: system
+detection:
+  selection:
+    EventID: 104
+  condition: selection
+falsepositives:
+  - Authorised log management during maintenance
+level: high

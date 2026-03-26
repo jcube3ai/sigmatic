@@ -1,0 +1,28 @@
+title: VeilHunter - AMSI Provider Registered or Tampered
+id: d6e7f8a9-0301-4b9c-3d4e-0de232280301
+status: experimental
+description: >
+  Detects modification of AMSI provider registry keys. Adversaries modify
+  or replace AMSI providers to disable or bypass the Antimalware Scan
+  Interface, allowing malicious code to execute unscanned (T1562.001).
+references:
+  - https://attack.mitre.org/techniques/T1562/001/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.defense_evasion
+  - attack.t1562.001
+logsource:
+  product: windows
+  category: registry_set
+detection:
+  selection:
+    TargetObject|contains: '\SOFTWARE\Microsoft\AMSI\Providers\'
+  filter_legit_security:
+    Image|contains:
+      - '\Program Files\Windows Defender\'
+      - '\Program Files\Microsoft Security Client\'
+  condition: selection and not filter_legit_security
+falsepositives:
+  - AV/EDR products registering their own AMSI providers
+level: high

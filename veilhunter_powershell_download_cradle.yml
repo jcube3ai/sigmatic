@@ -1,0 +1,40 @@
+title: VeilHunter - PowerShell Download Cradle
+id: d8e9f0a1-0404-4b1c-5d6e-3dae54e40404
+status: experimental
+description: >
+  Detects PowerShell being used to download and execute code from a
+  remote URL (download cradle). Common patterns include Invoke-Expression
+  with WebClient, Net.WebClient DownloadString, and iwr/wget shortcuts.
+  Adversaries use this as the initial execution step in many attack chains.
+references:
+  - https://attack.mitre.org/techniques/T1059/001/
+  - https://attack.mitre.org/techniques/T1105/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.execution
+  - attack.command_and_control
+  - attack.t1059.001
+  - attack.t1105
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection:
+    Image|endswith:
+      - '\powershell.exe'
+      - '\pwsh.exe'
+    CommandLine|contains:
+      - 'IEX'
+      - 'Invoke-Expression'
+      - 'DownloadString'
+      - 'DownloadFile'
+      - 'WebClient'
+      - 'Net.WebClient'
+      - 'Invoke-WebRequest'
+      - 'Start-BitsTransfer'
+    CommandLine|contains: 'http'
+  condition: selection
+falsepositives:
+  - Legitimate admin scripts downloading resources
+level: high

@@ -1,0 +1,34 @@
+title: VeilHunter - Executable Written to Startup Folder
+id: d0e1f2a3-0010-4b3c-7d8e-9f0a1b2c3d4e
+status: experimental
+description: >
+  Detects a script or executable being written to a Windows Startup folder.
+  Files placed here execute at user logon, providing persistent access (T1547.009).
+references:
+  - https://attack.mitre.org/techniques/T1547/009/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.persistence
+  - attack.t1547.009
+logsource:
+  product: windows
+  category: file_event
+detection:
+  selection:
+    TargetFilename|contains:
+      - '\Microsoft\Windows\Start Menu\Programs\Startup\'
+      - '\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\'
+    TargetFilename|endswith:
+      - '.exe'
+      - '.bat'
+      - '.cmd'
+      - '.ps1'
+      - '.vbs'
+      - '.js'
+      - '.hta'
+      - '.lnk'
+  condition: selection
+falsepositives:
+  - Legitimate software placing shortcuts in startup
+level: medium

@@ -1,0 +1,32 @@
+title: VeilHunter - Winlogon Helper DLL or Shell Tampered
+id: e1f2a3b4-0011-4c4d-8e9f-0a1b2c3d4e5f
+status: experimental
+description: >
+  Detects modification of the Winlogon Userinit or Shell registry values,
+  or addition of a Notify DLL. Adversaries modify these to execute code
+  during the logon process (T1547.004).
+references:
+  - https://attack.mitre.org/techniques/T1547/004/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.persistence
+  - attack.t1547.004
+logsource:
+  product: windows
+  category: registry_set
+detection:
+  selection_userinit:
+    TargetObject|endswith: '\Winlogon\Userinit'
+  filter_default_userinit:
+    Details: 'C:\Windows\system32\userinit.exe,'
+  selection_shell:
+    TargetObject|endswith: '\Winlogon\Shell'
+  filter_default_shell:
+    Details: 'explorer.exe'
+  selection_notify:
+    TargetObject|contains: '\Winlogon\Notify\'
+  condition: (selection_userinit and not filter_default_userinit) or (selection_shell and not filter_default_shell) or selection_notify
+falsepositives:
+  - System updates occasionally modify these values
+level: high

@@ -1,0 +1,34 @@
+title: VeilHunter - Ransom Note File Created
+id: e5f6a7b8-0504-4c8d-2e3f-ae45cb5b0504
+status: experimental
+description: >
+  Detects the creation of files matching common ransomware note naming
+  patterns. The appearance of these files indicates that encryption has
+  begun or is complete (T1486).
+references:
+  - https://attack.mitre.org/techniques/T1486/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.impact
+  - attack.t1486
+logsource:
+  product: windows
+  category: file_event
+detection:
+  selection:
+    TargetFilename|contains:
+      - 'README'
+      - 'HOW_TO_DECRYPT'
+      - 'HOW-TO-DECRYPT'
+      - 'RESTORE_FILES'
+      - 'YOUR_FILES'
+      - 'DECRYPT_INSTRUCTION'
+      - 'RECOVERY_NOTE'
+      - '_READ_ME_'
+      - 'RANSOM_NOTE'
+    TargetFilename|endswith: '.txt'
+  condition: selection
+falsepositives:
+  - None expected in production environments
+level: critical

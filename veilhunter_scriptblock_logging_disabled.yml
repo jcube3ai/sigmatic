@@ -1,0 +1,26 @@
+title: VeilHunter - PowerShell Script Block Logging Disabled
+id: e7f8a9b0-0302-4c0d-4e5f-1ef343390302
+status: experimental
+description: >
+  Detects the disabling of PowerShell ScriptBlock logging via group policy
+  registry key. This is a common anti-forensic step before running
+  obfuscated PowerShell payloads (T1562.001 / T1027).
+references:
+  - https://attack.mitre.org/techniques/T1562/001/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.defense_evasion
+  - attack.t1562.001
+  - attack.t1027
+logsource:
+  product: windows
+  category: registry_set
+detection:
+  selection:
+    TargetObject|endswith: '\PowerShell\ScriptBlockLogging\EnableScriptBlockLogging'
+    Details: 'DWORD (0x00000000)'
+  condition: selection
+falsepositives:
+  - Group policy configurations managing PowerShell logging
+level: high

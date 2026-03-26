@@ -1,0 +1,25 @@
+title: VeilHunter - WMI CommandLineEventConsumer Registered
+id: b8c9d0e1-0008-4f1a-5b6c-7d8e9f0a1b2c
+status: experimental
+description: >
+  Detects registration of a WMI CommandLineEventConsumer, which executes
+  a command when a subscribed event fires. This is the most common WMI
+  persistence mechanism used by adversaries and C2 frameworks.
+references:
+  - https://attack.mitre.org/techniques/T1546/003/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.persistence
+  - attack.t1546.003
+logsource:
+  product: windows
+  category: wmi_event
+detection:
+  selection:
+    EventID: 5861
+    Message|contains: 'CommandLineEventConsumer'
+  condition: selection
+falsepositives:
+  - SCCM, monitoring agents, antivirus products
+level: high

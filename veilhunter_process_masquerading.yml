@@ -1,0 +1,38 @@
+title: VeilHunter - Windows System Process Running from Unexpected Path
+id: d2e3f4a5-0307-4b5c-9d0e-6d4898e80307
+status: experimental
+description: >
+  Detects known Windows system process names (svchost, lsass, csrss, etc.)
+  running from paths other than System32 or SysWOW64. Adversaries rename
+  malware after legitimate processes to blend in (T1036.005).
+references:
+  - https://attack.mitre.org/techniques/T1036/005/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.defense_evasion
+  - attack.t1036.005
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_svchost:
+    Image|endswith: '\svchost.exe'
+  filter_svchost_legit:
+    Image|contains:
+      - '\Windows\System32\svchost.exe'
+      - '\Windows\SysWOW64\svchost.exe'
+  selection_lsass:
+    Image|endswith: '\lsass.exe'
+  filter_lsass_legit:
+    Image: 'C:\Windows\System32\lsass.exe'
+  selection_csrss:
+    Image|endswith: '\csrss.exe'
+  filter_csrss_legit:
+    Image|contains:
+      - '\Windows\System32\csrss.exe'
+      - '\Windows\SysWOW64\csrss.exe'
+  condition: (selection_svchost and not filter_svchost_legit) or (selection_lsass and not filter_lsass_legit) or (selection_csrss and not filter_csrss_legit)
+falsepositives:
+  - Very rare — system processes should only run from System32
+level: critical

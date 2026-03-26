@@ -1,0 +1,31 @@
+title: VeilHunter - Windows Service with Suspicious ImagePath
+id: f6a7b8c9-0006-4d9e-3f4a-5b6c7d8e9f0a
+status: experimental
+description: >
+  Detects a Windows service whose ImagePath references a user-writable
+  location (Temp, AppData, ProgramData, Downloads, Users\Public).
+  Adversaries plant malicious service binaries in these paths to survive reboots.
+references:
+  - https://attack.mitre.org/techniques/T1543/003/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.persistence
+  - attack.t1543.003
+logsource:
+  product: windows
+  category: registry_set
+detection:
+  selection:
+    TargetObject|contains: '\SYSTEM\CurrentControlSet\Services\'
+    TargetObject|endswith: '\ImagePath'
+    Details|contains:
+      - '\Temp\'
+      - '\AppData\'
+      - '\ProgramData\'
+      - '\Downloads\'
+      - '\Users\Public\'
+  condition: selection
+falsepositives:
+  - Rare — very few legitimate services run from these paths
+level: high

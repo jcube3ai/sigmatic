@@ -1,0 +1,26 @@
+title: VeilHunter - Windows Defender Exclusion Path Added
+id: a9b0c1d2-0304-4e2f-6a7b-3a1565b50304
+status: experimental
+description: >
+  Detects a path being added to Windows Defender exclusions. Adversaries
+  add exclusions for their malware staging locations to prevent detection
+  of their tools and payloads (T1562.001).
+references:
+  - https://attack.mitre.org/techniques/T1562/001/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.defense_evasion
+  - attack.t1562.001
+logsource:
+  product: windows
+  category: registry_set
+detection:
+  selection:
+    TargetObject|contains: '\Windows Defender\Exclusions\Paths\'
+  filter_empty:
+    Details: ''
+  condition: selection and not filter_empty
+falsepositives:
+  - AV management tools adding exclusions for known good paths
+level: medium

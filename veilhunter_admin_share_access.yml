@@ -1,0 +1,33 @@
+title: VeilHunter - Admin Share Accessed from Remote Host
+id: d0e1f2a3-0202-4b3c-7d8e-4da676c20202
+status: experimental
+description: >
+  Detects access to Windows admin shares (C$, ADMIN$, IPC$) from a
+  remote IP address. While common in managed environments, unexpected
+  access is a strong lateral movement indicator (T1021.002).
+references:
+  - https://attack.mitre.org/techniques/T1021/002/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.lateral_movement
+  - attack.t1021.002
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 5140
+    ShareName|contains:
+      - 'C$'
+      - 'ADMIN$'
+      - 'IPC$'
+  filter_localhost:
+    IpAddress:
+      - '127.0.0.1'
+      - '::1'
+      - '-'
+  condition: selection and not filter_localhost
+falsepositives:
+  - Domain admins performing legitimate remote management
+level: medium

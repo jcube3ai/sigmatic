@@ -1,0 +1,32 @@
+title: VeilHunter - Kerberoasting - RC4 Service Ticket Request
+id: d4e5f6a7-0104-4b7c-1d2e-ed4010c60104
+status: experimental
+description: >
+  Detects a Kerberos service ticket request using RC4 encryption
+  (encryption type 0x17/0x18) for a non-machine account SPN.
+  This is the primary indicator of Kerberoasting (T1558.003).
+  Requires "Audit Kerberos Service Ticket Operations" to be enabled.
+references:
+  - https://attack.mitre.org/techniques/T1558/003/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.credential_access
+  - attack.t1558.003
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4769
+    TicketEncryptionType:
+      - '0x17'
+      - '0x18'
+  filter_machine_accounts:
+    ServiceName|endswith: '$'
+  filter_krbtgt:
+    ServiceName: 'krbtgt'
+  condition: selection and not filter_machine_accounts and not filter_krbtgt
+falsepositives:
+  - Legacy systems or services that only support RC4
+level: high

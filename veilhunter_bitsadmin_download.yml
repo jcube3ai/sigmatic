@@ -1,0 +1,31 @@
+title: VeilHunter - BITSAdmin Used to Download Remote File
+id: b6c7d8e9-0402-4f9a-3b4c-1b8c32c20402
+status: experimental
+description: >
+  Detects bitsadmin.exe being used to create a transfer job downloading
+  from a remote URL. Adversaries abuse bitsadmin.exe as a LOLBin to
+  download payloads while bypassing proxy and AV controls (T1197 / T1105).
+references:
+  - https://attack.mitre.org/techniques/T1197/
+  - https://attack.mitre.org/techniques/T1105/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.command_and_control
+  - attack.t1197
+  - attack.t1105
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection:
+    Image|endswith: '\bitsadmin.exe'
+    CommandLine|contains:
+      - '/transfer'
+      - '/create'
+      - '/addfile'
+    CommandLine|contains: 'http'
+  condition: selection
+falsepositives:
+  - Legitimate scripts using bitsadmin for downloads
+level: high

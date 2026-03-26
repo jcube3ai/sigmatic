@@ -1,0 +1,30 @@
+title: VeilHunter - MSHTA Executing Remote HTA File
+id: b8c9d0e1-0601-4f1a-5b6c-d178fe8e0601
+status: experimental
+description: >
+  Detects mshta.exe executing an HTA file from a remote URL. MSHTA is
+  commonly abused to execute malicious HTML Application files that bypass
+  application whitelisting (T1218.005).
+references:
+  - https://attack.mitre.org/techniques/T1218/005/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.execution
+  - attack.defense_evasion
+  - attack.t1218.005
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection:
+    Image|endswith: '\mshta.exe'
+    CommandLine|contains:
+      - 'http://'
+      - 'https://'
+      - 'javascript:'
+      - 'vbscript:'
+  condition: selection
+falsepositives:
+  - Very rare — mshta.exe rarely has legitimate network access needs
+level: high

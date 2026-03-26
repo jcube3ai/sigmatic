@@ -1,0 +1,30 @@
+title: VeilHunter - PSExec-Style Service Installed
+id: c9d0e1f2-0201-4a2b-6c7d-3c9565b10201
+status: experimental
+description: >
+  Detects the installation of a PSEXESVC, paexec, or remcom service,
+  which indicates remote code execution via Sysinternals PsExec or
+  similar tools. Mapped to T1569.002.
+references:
+  - https://attack.mitre.org/techniques/T1569/002/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.lateral_movement
+  - attack.execution
+  - attack.t1569.002
+logsource:
+  product: windows
+  service: system
+detection:
+  selection:
+    EventID: 7045
+    ServiceName|contains:
+      - 'PSEXESVC'
+      - 'paexec'
+      - 'remcom'
+      - 'csexec'
+  condition: selection
+falsepositives:
+  - Authorised use of PsExec by sysadmins during maintenance
+level: high

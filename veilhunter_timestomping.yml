@@ -1,0 +1,35 @@
+title: VeilHunter - File Timestamp Manipulation (Timestomping)
+id: e3f4a5b6-0308-4c6d-0e1f-7e5909f90308
+status: experimental
+description: >
+  Detects file creation or modification events where the file timestamp
+  appears to have been manipulated to a date significantly in the past.
+  Adversaries timestomp files to avoid detection by timeline analysis (T1070.006).
+  Requires Sysmon EventID 2 (file creation time changed).
+references:
+  - https://attack.mitre.org/techniques/T1070/006/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.defense_evasion
+  - attack.t1070.006
+logsource:
+  product: windows
+  category: file_change
+detection:
+  selection:
+    EventID: 2
+    TargetFilename|endswith:
+      - '.exe'
+      - '.dll'
+      - '.bat'
+      - '.ps1'
+  filter_installers:
+    Image|contains:
+      - '\msiexec.exe'
+      - '\TrustedInstaller.exe'
+      - '\wuauclt.exe'
+  condition: selection and not filter_installers
+falsepositives:
+  - File copy tools that preserve original timestamps (robocopy, xcopy /T)
+level: medium

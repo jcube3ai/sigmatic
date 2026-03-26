@@ -1,0 +1,24 @@
+title: VeilHunter - Windows Security Event Log Cleared
+id: b0c1d2e3-0305-4f3a-7b8c-4b2676c60305
+status: experimental
+description: >
+  Detects the clearing of the Windows Security event log (EventID 1102).
+  Adversaries clear event logs to remove forensic evidence of their
+  activity (T1070.001). This is a near-zero false positive rule.
+references:
+  - https://attack.mitre.org/techniques/T1070/001/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.defense_evasion
+  - attack.t1070.001
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 1102
+  condition: selection
+falsepositives:
+  - Authorised log management scripts during maintenance windows
+level: high

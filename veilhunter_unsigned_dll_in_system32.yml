@@ -1,0 +1,34 @@
+title: VeilHunter - Unsigned DLL Created in System32
+id: f4a5b6c7-0309-4d7e-1f2a-8f6a10a00309
+status: experimental
+description: >
+  Detects a DLL file being created in System32 or SysWOW64 without a
+  valid Authenticode signature. Adversaries plant unsigned DLLs in these
+  paths for DLL hijacking or process injection (T1574.001 / T1055).
+references:
+  - https://attack.mitre.org/techniques/T1574/001/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.defense_evasion
+  - attack.persistence
+  - attack.t1574.001
+logsource:
+  product: windows
+  category: file_event
+detection:
+  selection:
+    TargetFilename|contains:
+      - '\Windows\System32\'
+      - '\Windows\SysWOW64\'
+    TargetFilename|endswith: '.dll'
+  filter_trusted_images:
+    Image|contains:
+      - '\TrustedInstaller.exe'
+      - '\wuauclt.exe'
+      - '\msiexec.exe'
+      - '\System32\wbem\'
+  condition: selection and not filter_trusted_images
+falsepositives:
+  - Windows Update, legitimate software installations
+level: high

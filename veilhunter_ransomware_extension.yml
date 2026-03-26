@@ -1,0 +1,39 @@
+title: VeilHunter - Known Ransomware File Extension Created
+id: f6a7b8c9-0505-4d9e-3f4a-bf56dc6c0505
+status: experimental
+description: >
+  Detects files being created with extensions associated with known
+  ransomware families (WannaCry, Locky, Cerber, Zepto, etc.).
+  This indicates active file encryption is in progress (T1486).
+references:
+  - https://attack.mitre.org/techniques/T1486/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.impact
+  - attack.t1486
+logsource:
+  product: windows
+  category: file_event
+detection:
+  selection:
+    TargetFilename|endswith:
+      - '.wncry'
+      - '.wnry'
+      - '.WNCRYPT'
+      - '.locked'
+      - '.encrypted'
+      - '.enc'
+      - '.crypted'
+      - '.crypt'
+      - '.locky'
+      - '.cerber'
+      - '.zepto'
+      - '.ctbl'
+      - '.ctb2'
+      - '.lol'
+      - '.pay2decrypt'
+  condition: selection
+falsepositives:
+  - None expected
+level: critical

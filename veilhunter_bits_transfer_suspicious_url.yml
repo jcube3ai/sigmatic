@@ -1,0 +1,33 @@
+title: VeilHunter - BITS Transfer to Suspicious External URL
+id: a5b6c7d8-0401-4e8f-2a3b-0a7b21b10401
+status: experimental
+description: >
+  Detects a BITS (Background Intelligent Transfer Service) job transferring
+  data to or from a URL that is not a Microsoft or Windows Update domain.
+  Adversaries use BITS for stealthy C2 communication and payload download (T1197).
+references:
+  - https://attack.mitre.org/techniques/T1197/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.command_and_control
+  - attack.t1197
+logsource:
+  product: windows
+  service: bits-client
+detection:
+  selection:
+    EventID:
+      - 3
+      - 59
+      - 60
+  filter_microsoft:
+    BytesTotal|contains:
+      - 'microsoft.com'
+      - 'windowsupdate.com'
+      - 'windows.com'
+      - 'msftconnecttest.com'
+  condition: selection and not filter_microsoft
+falsepositives:
+  - Legitimate software using BITS for downloads (Adobe, Chrome updater)
+level: medium

@@ -1,0 +1,42 @@
+title: VeilHunter - Archive File Written to Cloud Sync Folder
+id: e9f0a1b2-0405-4c2d-6e7f-4ebf65f50405
+status: experimental
+description: >
+  Detects an archive or database file being written to a cloud storage
+  sync folder (OneDrive, Dropbox, Google Drive, Box, iCloud). Adversaries
+  stage data in cloud sync folders for automated exfiltration (T1048).
+references:
+  - https://attack.mitre.org/techniques/T1048/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.exfiltration
+  - attack.t1048
+logsource:
+  product: windows
+  category: file_event
+detection:
+  selection_cloud_path:
+    TargetFilename|contains:
+      - '\OneDrive\'
+      - '\Dropbox\'
+      - '\Google Drive\'
+      - '\Box Sync\'
+      - '\iCloudDrive\'
+  selection_suspicious_ext:
+    TargetFilename|endswith:
+      - '.zip'
+      - '.rar'
+      - '.7z'
+      - '.tar'
+      - '.gz'
+      - '.db'
+      - '.sqlite'
+      - '.mdb'
+      - '.kdbx'
+      - '.pst'
+      - '.ost'
+  condition: selection_cloud_path and selection_suspicious_ext
+falsepositives:
+  - Users legitimately archiving and syncing files
+level: medium

@@ -1,0 +1,27 @@
+title: VeilHunter - RDP Enabled via Registry Modification
+id: c5d6e7f8-0207-4a8b-2c3d-9cf121170207
+status: experimental
+description: >
+  Detects the fDenyTSConnections registry value being set to 0, which
+  enables Remote Desktop. Adversaries enable RDP on compromised systems
+  to maintain remote access (T1021.001 / T1112).
+references:
+  - https://attack.mitre.org/techniques/T1021/001/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.lateral_movement
+  - attack.defense_evasion
+  - attack.t1021.001
+  - attack.t1112
+logsource:
+  product: windows
+  category: registry_set
+detection:
+  selection:
+    TargetObject|endswith: '\Terminal Server\fDenyTSConnections'
+    Details: 'DWORD (0x00000000)'
+  condition: selection
+falsepositives:
+  - IT admins enabling RDP intentionally
+level: medium

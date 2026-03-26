@@ -1,0 +1,36 @@
+title: VeilHunter - Wscript/Cscript Executing Script from Staging Path
+id: f2a3b4c5-0605-4d5e-9f0a-15bcd2c20605
+status: experimental
+description: >
+  Detects wscript.exe or cscript.exe executing a script file located in
+  a user-writable directory (Temp, AppData, Downloads, ProgramData).
+  Adversaries drop and execute VBS/JS scripts in these paths (T1059.005 / T1059.007).
+references:
+  - https://attack.mitre.org/techniques/T1059/005/
+  - https://attack.mitre.org/techniques/T1059/007/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.execution
+  - attack.t1059.005
+  - attack.t1059.007
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection:
+    Image|endswith:
+      - '\wscript.exe'
+      - '\cscript.exe'
+    CommandLine|contains:
+      - '\Temp\'
+      - '\AppData\'
+      - '\Downloads\'
+      - '\ProgramData\'
+      - '\Users\Public\'
+      - 'http://'
+      - 'https://'
+  condition: selection
+falsepositives:
+  - Some legitimate admin scripts run from user-writable locations
+level: high

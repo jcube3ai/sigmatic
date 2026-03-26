@@ -1,0 +1,29 @@
+title: VeilHunter - Suspicious DPAPI Master Key Access
+id: f6a7b8c9-0106-4d9e-3f4a-0f6232e80106
+status: experimental
+description: >
+  Detects access to DPAPI master key files in the user Protect directory
+  by an unexpected process. These keys are used to decrypt browser
+  credentials and other DPAPI-protected secrets (T1555.004).
+references:
+  - https://attack.mitre.org/techniques/T1555/004/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.credential_access
+  - attack.t1555.004
+logsource:
+  product: windows
+  category: file_access
+detection:
+  selection:
+    TargetFilename|contains: '\AppData\Roaming\Microsoft\Protect\'
+  filter_system:
+    Image|contains:
+      - '\Windows\System32\lsass.exe'
+      - '\Windows\System32\svchost.exe'
+      - '\Windows\System32\dpapi.dll'
+  condition: selection and not filter_system
+falsepositives:
+  - Backup software, password managers
+level: medium

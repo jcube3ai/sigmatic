@@ -1,0 +1,29 @@
+title: VeilHunter - RDP Authentication Failure Spike
+id: b4c5d6e7-0206-4f7a-1b2c-8be010060206
+status: experimental
+description: >
+  Detects multiple failed RDP authentication attempts in a short window.
+  A high volume of EventID 4625 with logon type 10 (RemoteInteractive)
+  indicates a brute force attack against RDP (T1021.001 / T1110).
+references:
+  - https://attack.mitre.org/techniques/T1021/001/
+  - https://attack.mitre.org/techniques/T1110/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.lateral_movement
+  - attack.credential_access
+  - attack.t1021.001
+  - attack.t1110
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4625
+    LogonType: 10
+  condition: selection | count() by IpAddress > 5
+timeframe: 5m
+falsepositives:
+  - Misconfigured remote access clients, expired credentials
+level: medium

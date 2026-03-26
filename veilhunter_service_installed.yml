@@ -1,0 +1,31 @@
+title: VeilHunter - New Windows Service Installed
+id: e5f6a7b8-0005-4c8d-2e3f-4a5b6c7d8e9f
+status: experimental
+description: >
+  Detects the installation of a new Windows service. While common during
+  software installation, unexpected service installs outside of change
+  windows are a high-fidelity indicator of T1543.003.
+references:
+  - https://attack.mitre.org/techniques/T1543/003/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.persistence
+  - attack.privilege_escalation
+  - attack.t1543.003
+logsource:
+  product: windows
+  service: system
+detection:
+  selection:
+    EventID: 7045
+  filter_known_installers:
+    ImagePath|contains:
+      - '\Windows\System32\'
+      - '\Windows\SysWOW64\'
+      - '\Program Files\'
+      - '\Program Files (x86)\'
+  condition: selection and not filter_known_installers
+falsepositives:
+  - Legitimate software installers, security agents, drivers
+level: medium

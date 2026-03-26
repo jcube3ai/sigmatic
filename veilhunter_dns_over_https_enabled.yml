@@ -1,0 +1,25 @@
+title: VeilHunter - DNS over HTTPS Enabled via Registry
+id: f0a1b2c3-0406-4d3e-7f8a-5f0076060406
+status: experimental
+description: >
+  Detects EnableAutoDoh being set to 2 in the DNS client configuration,
+  enabling DNS over HTTPS. Adversaries enable DoH to tunnel C2 traffic
+  through DNS queries that bypass traditional DNS monitoring (T1071.004).
+references:
+  - https://attack.mitre.org/techniques/T1071/004/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.command_and_control
+  - attack.t1071.004
+logsource:
+  product: windows
+  category: registry_set
+detection:
+  selection:
+    TargetObject|endswith: '\Services\Dnscache\Parameters\EnableAutoDoh'
+    Details: 'DWORD (0x00000002)'
+  condition: selection
+falsepositives:
+  - Intentional DoH configuration by network admins
+level: medium

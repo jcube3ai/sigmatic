@@ -1,0 +1,32 @@
+title: VeilHunter - Certutil Used to Decode or Download Content
+id: c9d0e1f2-0602-4a2b-6c7d-e289af9f0602
+status: experimental
+description: >
+  Detects certutil.exe being used to decode base64-encoded content or
+  download files from a URL. Both are common LOLBin abuse techniques
+  for payload delivery (T1140 / T1105).
+references:
+  - https://attack.mitre.org/techniques/T1140/
+  - https://attack.mitre.org/techniques/T1105/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.defense_evasion
+  - attack.t1140
+  - attack.t1105
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection:
+    Image|endswith: '\certutil.exe'
+    CommandLine|contains:
+      - '-decode'
+      - '-urlcache'
+      - '-ping'
+      - 'http://'
+      - 'https://'
+  condition: selection
+falsepositives:
+  - PKI administrators using certutil for certificate management
+level: high

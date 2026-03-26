@@ -1,0 +1,30 @@
+title: VeilHunter - WMIC Process Create for Remote Execution
+id: e7f8a9b0-0610-4c0d-4e5f-6a1217170610
+status: experimental
+description: >
+  Detects wmic.exe being used with "process call create" to execute
+  arbitrary commands. This is used for local and remote code execution
+  and is a common lateral movement and execution technique (T1047).
+references:
+  - https://attack.mitre.org/techniques/T1047/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.execution
+  - attack.t1047
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection:
+    Image|endswith: '\wmic.exe'
+    CommandLine|contains:
+      - 'process'
+      - 'call'
+      - 'create'
+  filter_legit:
+    CommandLine|contains: 'Get-WmiObject'
+  condition: selection and not filter_legit
+falsepositives:
+  - WMI-based management tools and scripts
+level: medium

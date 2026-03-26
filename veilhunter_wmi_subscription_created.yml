@@ -1,0 +1,24 @@
+title: VeilHunter - WMI Permanent Event Subscription Created
+id: a7b8c9d0-0007-4e0f-4a5b-6c7d8e9f0a1b
+status: experimental
+description: >
+  Detects the creation of a WMI permanent event subscription (EventFilter,
+  Consumer, or FilterToConsumerBinding). Adversaries use WMI subscriptions
+  for fileless persistence and execution (T1546.003).
+references:
+  - https://attack.mitre.org/techniques/T1546/003/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.persistence
+  - attack.t1546.003
+logsource:
+  product: windows
+  service: wmi
+detection:
+  selection_event:
+    EventID: 5861
+  condition: selection_event
+falsepositives:
+  - Legitimate management software using WMI subscriptions (SCCM, monitoring agents)
+level: high
