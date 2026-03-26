@@ -1,0 +1,49 @@
+title: Silent Ransom Group - Suspicious RMM Tool Installed After Hours
+id: aa01bb02-cc03-4dd0-ee04-ff05001100aa
+status: experimental
+description: >
+  Detects installation or execution of remote monitoring and management tools
+  (AnyDesk, Zoho Assist, ScreenConnect, Atera) that are frequently abused by
+  Silent Ransom Group (Luna Moth/UNC3753) following vishing attacks on law
+  firm staff. The FBI May 2025 advisory specifically calls out AnyDesk and
+  Zoho Assist as the primary tools used after gaining victim trust via phone.
+  The group poses as IT helpdesk employees to convince staff to install these tools.
+references:
+  - https://www.ic3.gov/CSA/2025/250523.pdf
+  - https://attack.mitre.org/groups/G0075/
+author: VeilHunter - Legal Sector APT
+date: 2026-03-25
+tags:
+  - attack.initial_access
+  - attack.command_and_control
+  - attack.t1219
+  - attack.t1566.004
+  - tlp:white
+  - actor:silent_ransom_group
+  - sector:legal
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_rmm:
+    Image|endswith:
+      - '\AnyDesk.exe'
+      - '\anydesk.exe'
+      - '\ZohoAssist.exe'
+      - '\zohoassist.exe'
+      - '\ScreenConnect.ClientService.exe'
+      - '\connectwisecontrol.client.exe'
+      - '\AteraAgent.exe'
+      - '\SplashtopStreamer.exe'
+      - '\rustdesk.exe'
+  filter_known_mgmt_path:
+    Image|contains:
+      - '\Program Files\AnyDesk\'
+      - '\Program Files (x86)\AnyDesk\'
+      - '\Program Files\Splashtop\'
+      - '\Program Files\ScreenConnect\'
+  condition: selection_rmm and not filter_known_mgmt_path
+falsepositives:
+  - Legitimate IT-managed RMM deployments installed to standard paths
+  - Authorised helpdesk software
+level: high

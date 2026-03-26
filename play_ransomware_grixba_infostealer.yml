@@ -1,0 +1,53 @@
+title: Play Ransomware - Grixba Infostealer Network Scanning
+id: bb05cc06-dd07-4ee0-ff08-00dd00ee0bb
+status: experimental
+description: >
+  Detects behavior consistent with the Grixba infostealer used exclusively
+  by Play ransomware actors. Grixba enumerates network information, scans
+  for installed security software, and collects system data. It is used in
+  the reconnaissance phase before lateral movement. Indicators include
+  rapid sequential enumeration of installed software, running processes,
+  and network shares from a single process (T1016 / T1518.001).
+references:
+  - https://www.cisa.gov/sites/default/files/2025-06/aa23-352a-stopransomware-play-ransomware_2_revised.pdf
+  - https://attack.mitre.org/techniques/T1518/001/
+author: VeilHunter - Legal Sector APT
+date: 2026-03-25
+tags:
+  - attack.discovery
+  - attack.t1016
+  - attack.t1518.001
+  - tlp:white
+  - actor:play_ransomware
+  - sector:legal
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_av_enum:
+    Image|endswith:
+      - '\powershell.exe'
+      - '\wmic.exe'
+    CommandLine|contains:
+      - 'AntiVirusProduct'
+      - 'SecurityCenter2'
+      - 'Get-MpComputerStatus'
+      - 'winmgmts'
+  selection_net_share_enum:
+    Image|endswith:
+      - '\net.exe'
+      - '\net1.exe'
+    CommandLine|contains:
+      - 'share'
+      - 'view'
+      - 'session'
+  selection_rapid_enum:
+    Image|endswith: '\wmic.exe'
+    CommandLine|contains:
+      - 'product get'
+      - 'process get'
+      - 'logicaldisk get'
+  condition: selection_av_enum or selection_net_share_enum or selection_rapid_enum
+falsepositives:
+  - Legitimate IT management tools performing inventory
+level: medium

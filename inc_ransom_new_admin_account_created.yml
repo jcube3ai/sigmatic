@@ -1,0 +1,35 @@
+title: INC Ransom - New Local Admin Account Created Post-Compromise
+id: cc09dd01-ee02-4ff0-0033-008800990cc
+status: experimental
+description: >
+  Detects the creation of a new local administrator account, a privilege
+  escalation technique observed in INC Ransom incidents documented by the
+  ACSC. After gaining initial access, INC Ransom affiliates create admin-level
+  accounts to ensure persistent elevated access before deploying ransomware
+  across the network (T1136.001 / T1098).
+references:
+  - https://www.cyber.gov.au/about-us/view-all-content/alerts-and-advisories/inc-ransom-affiliate-model-enabling-targeting-of-critical-networks
+  - https://attack.mitre.org/techniques/T1136/001/
+author: VeilHunter - Legal Sector APT
+date: 2026-03-25
+tags:
+  - attack.persistence
+  - attack.privilege_escalation
+  - attack.t1136.001
+  - attack.t1098
+  - tlp:white
+  - actor:inc_ransom
+  - sector:legal
+logsource:
+  product: windows
+  service: security
+detection:
+  selection_account_created:
+    EventID: 4720
+  selection_added_to_admins:
+    EventID: 4732
+    TargetUserName: 'Administrators'
+  condition: selection_account_created or selection_added_to_admins
+falsepositives:
+  - Legitimate account provisioning by IT administrators
+level: medium

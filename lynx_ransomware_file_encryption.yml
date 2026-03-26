@@ -1,0 +1,39 @@
+title: Lynx Ransomware - File Encryption Activity (INC Variant)
+id: ee02ff03-aa04-4bb0-cc05-00aa00bb0ee
+status: experimental
+description: >
+  Detects Lynx ransomware file encryption activity. Lynx is a rebranded
+  variant of INC Ransomware and hit US law firm Hunter Taubman Fischer & Li
+  LLC in January 2025. Lynx uses partial encryption and multi-threading
+  for speed. Indicators include mass file rename/overwrite operations and
+  ransom note creation. Lynx ransom notes use .README.txt extension
+  appended to filenames (T1486).
+references:
+  - https://www.picussecurity.com/resource/blog/lynx-ransomware
+  - https://attack.mitre.org/techniques/T1486/
+author: VeilHunter - Legal Sector APT
+date: 2026-03-25
+tags:
+  - attack.impact
+  - attack.t1486
+  - tlp:white
+  - actor:lynx_ransomware
+  - sector:legal
+logsource:
+  product: windows
+  category: file_event
+detection:
+  selection_ransom_note:
+    TargetFilename|endswith:
+      - '.README.txt'
+      - 'LYNX_README.txt'
+      - 'README.txt'
+    TargetFilename|contains:
+      - 'LYNX'
+      - 'README'
+  selection_encrypted_ext:
+    TargetFilename|endswith: '.LYNX'
+  condition: selection_ransom_note or selection_encrypted_ext
+falsepositives:
+  - None expected in production environments
+level: critical

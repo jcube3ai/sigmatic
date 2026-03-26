@@ -1,0 +1,35 @@
+title: Play Ransomware - Ransom Note with GMX/WEB.DE Contact Address
+id: dd07ee08-ff09-4aa0-bb01-00ff00aa0dd
+status: experimental
+description: >
+  Detects the creation of a Play ransomware ransom note. Play ransomware
+  notes consistently direct victims to contact the group at email addresses
+  ending in @gmx.de or @web.de - a documented and unique TTP confirmed in
+  multiple CISA/FBI advisories. Detecting ransom note creation early can
+  allow incident response before full encryption completes (T1486 / T1657).
+references:
+  - https://www.cisa.gov/sites/default/files/2025-06/aa23-352a-stopransomware-play-ransomware_2_revised.pdf
+  - https://attack.mitre.org/techniques/T1486/
+author: VeilHunter - Legal Sector APT
+date: 2026-03-25
+tags:
+  - attack.impact
+  - attack.t1486
+  - attack.t1657
+  - tlp:white
+  - actor:play_ransomware
+  - sector:legal
+logsource:
+  product: windows
+  category: file_event
+detection:
+  selection_note_name:
+    TargetFilename|endswith: 'ReadMe.txt'
+  selection_note_content:
+    TargetFilename|contains: 'gmx.de'
+  selection_play_ext:
+    TargetFilename|endswith: '.PLAY'
+  condition: selection_note_name or selection_note_content or selection_play_ext
+falsepositives:
+  - None expected
+level: critical

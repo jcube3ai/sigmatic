@@ -1,0 +1,57 @@
+title: Silent Ransom Group - WinSCP Data Exfiltration to External IP
+id: bb02cc03-dd04-4ee0-ff05-001100220bb
+status: experimental
+description: >
+  Detects WinSCP being used to transfer data to an external IP address.
+  Silent Ransom Group (Luna Moth) uses WinSCP - including portable and
+  renamed versions - as their primary exfiltration tool after gaining
+  remote access to law firm systems. The FBI advisory specifically
+  names WinSCP as the primary exfil tool for this group (T1048 / T1041).
+references:
+  - https://www.ic3.gov/CSA/2025/250523.pdf
+  - https://attack.mitre.org/techniques/T1048/
+author: VeilHunter - Legal Sector APT
+date: 2026-03-25
+tags:
+  - attack.exfiltration
+  - attack.t1048
+  - attack.t1041
+  - tlp:white
+  - actor:silent_ransom_group
+  - sector:legal
+logsource:
+  product: windows
+  category: network_connection
+detection:
+  selection:
+    Image|contains: 'WinSCP'
+    Initiated: 'true'
+    DestinationPort:
+      - 22
+      - 21
+      - 2222
+  filter_local:
+    DestinationIp|startswith:
+      - '10.'
+      - '192.168.'
+      - '172.16.'
+      - '172.17.'
+      - '172.18.'
+      - '172.19.'
+      - '172.20.'
+      - '172.21.'
+      - '172.22.'
+      - '172.23.'
+      - '172.24.'
+      - '172.25.'
+      - '172.26.'
+      - '172.27.'
+      - '172.28.'
+      - '172.29.'
+      - '172.30.'
+      - '172.31.'
+      - '127.'
+  condition: selection and not filter_local
+falsepositives:
+  - Legitimate WinSCP use for managed file transfers to known SFTP destinations
+level: high

@@ -1,0 +1,44 @@
+title: Silent Ransom Group / INC Ransom - MegaSync Data Exfiltration
+id: ee05ff06-0007-4112-2233-004400550ee
+status: experimental
+description: >
+  Detects MegaSync or MEGA CMD being used to upload data to the MEGA
+  cloud storage platform. Both Silent Ransom Group and INC Ransom use
+  MEGA for data exfiltration from law firm environments prior to
+  ransom demands. Large or unexpected MEGA uploads from corporate
+  endpoints should be treated as high-priority incidents (T1567.002).
+references:
+  - https://www.halcyon.ai/ransomware-alerts/inc-ransom-group-mounts-rapid-campaign-against-law-firms
+  - https://attack.mitre.org/techniques/T1567/002/
+author: VeilHunter - Legal Sector APT
+date: 2026-03-25
+tags:
+  - attack.exfiltration
+  - attack.t1567.002
+  - tlp:white
+  - actor:silent_ransom_group
+  - actor:inc_ransom
+  - sector:legal
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_megasync:
+    Image|endswith:
+      - '\MEGAsync.exe'
+      - '\megasync.exe'
+      - '\MEGAcmd.exe'
+      - '\MEGAcmdShell.exe'
+    CommandLine|contains:
+      - 'put'
+      - 'upload'
+      - '--upload'
+  selection_network:
+    Image|endswith:
+      - '\MEGAsync.exe'
+      - '\megasync.exe'
+    Initiated: 'true'
+  condition: selection_megasync or selection_network
+falsepositives:
+  - Legitimate personal MEGA usage on corporate endpoints (should be blocked by policy)
+level: high

@@ -1,0 +1,38 @@
+title: Legal Sector - Unexpected RDP from Legal Tech Vendor IP Range
+id: ee05ff06-aa07-4bb0-cc08-001100220ee
+status: experimental
+description: >
+  Detects RDP logon events from IP addresses associated with legal technology
+  providers. INC Ransom has been assessed to have conducted supply chain
+  compromises affecting shared legal practice management platforms and managed
+  IT service providers. Unexpected RDP from a legal tech vendor IP outside of
+  approved maintenance windows should be investigated as a potential supply
+  chain indicator (T1199 / T1021.001).
+references:
+  - https://www.halcyon.ai/ransomware-alerts/inc-ransom-group-mounts-rapid-campaign-against-law-firms
+  - https://attack.mitre.org/techniques/T1199/
+author: VeilHunter - Legal Sector APT
+date: 2026-03-25
+tags:
+  - attack.initial_access
+  - attack.t1199
+  - attack.t1021.001
+  - tlp:white
+  - sector:legal
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4624
+    LogonType: 10
+  filter_approved_internal:
+    IpAddress|startswith:
+      - '10.'
+      - '192.168.'
+      - '172.16.'
+  condition: selection and not filter_approved_internal
+falsepositives: >
+  Approved vendor remote access - validate against approved IP allowlist.
+  Tune this rule by adding known vendor IP ranges to the filter.
+level: medium

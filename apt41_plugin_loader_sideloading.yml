@@ -1,0 +1,43 @@
+title: APT41 - DLL Side-Loading via Legitimate Signed Binary
+id: ff09aa01-bb02-4cc0-dd03-00bb00cc0ff
+status: experimental
+description: >
+  Detects DLL side-loading patterns associated with APT41 intrusions.
+  APT41 consistently uses legitimate signed executables to side-load
+  malicious DLLs, allowing them to execute code under the guise of
+  trusted software. This bypasses application allowlisting and reduces
+  detection by AV products. Common patterns include signed binaries
+  loading DLLs from the same directory (T1574.002).
+references:
+  - https://attack.mitre.org/groups/G0096/
+  - https://attack.mitre.org/techniques/T1574/002/
+author: VeilHunter - Legal Sector APT
+date: 2026-03-25
+tags:
+  - attack.defense_evasion
+  - attack.persistence
+  - attack.t1574.002
+  - tlp:white
+  - actor:apt41
+  - sector:legal
+logsource:
+  product: windows
+  category: image_load
+detection:
+  selection:
+    ImageLoaded|contains:
+      - '\Temp\'
+      - '\AppData\Local\'
+      - '\AppData\Roaming\'
+      - '\ProgramData\'
+      - '\Users\Public\'
+    Signed: 'false'
+  filter_os_dlls:
+    ImageLoaded|contains:
+      - '\Windows\System32\'
+      - '\Windows\SysWOW64\'
+      - '\Windows\WinSxS\'
+  condition: selection and not filter_os_dlls
+falsepositives:
+  - Legitimate software with DLLs in AppData (portable apps)
+level: medium

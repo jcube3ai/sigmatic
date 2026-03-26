@@ -1,0 +1,36 @@
+title: INC Ransom - Malicious win.exe Payload Execution
+id: bb08cc09-dd01-4ee0-ff02-007700880bb
+status: experimental
+description: >
+  Detects execution of a file named win.exe from user-writable or staging
+  paths. The Australian Cyber Security Centre (ACSC) specifically documented
+  INC Ransom deploying malicious files named win.exe as their primary payload
+  in 2025 incidents. Execution from Temp, AppData, or ProgramData of any file
+  named win.exe should be treated as a critical indicator (T1204.002).
+references:
+  - https://www.cyber.gov.au/about-us/view-all-content/alerts-and-advisories/inc-ransom-affiliate-model-enabling-targeting-of-critical-networks
+  - https://attack.mitre.org/groups/G1032/
+author: VeilHunter - Legal Sector APT
+date: 2026-03-25
+tags:
+  - attack.execution
+  - attack.t1204.002
+  - tlp:white
+  - actor:inc_ransom
+  - sector:legal
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection:
+    Image|endswith: '\win.exe'
+    Image|contains:
+      - '\Temp\'
+      - '\AppData\'
+      - '\ProgramData\'
+      - '\Users\Public\'
+      - '\Downloads\'
+  condition: selection
+falsepositives:
+  - Near zero - win.exe from temp/appdata paths is not a legitimate Windows binary
+level: critical

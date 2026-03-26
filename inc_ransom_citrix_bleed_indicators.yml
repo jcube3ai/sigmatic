@@ -1,0 +1,45 @@
+title: INC Ransom - Citrix NetScaler Session Token Abuse (CitrixBleed Pattern)
+id: dd01ee02-ff03-4aa0-bb04-009900aa0dd
+status: experimental
+description: >
+  Detects indicators of Citrix NetScaler exploitation consistent with
+  CitrixBleed (CVE-2023-4966) and related vulnerabilities used by INC Ransom
+  for initial access into law firm networks. Specifically looks for unusual
+  account logons from Citrix gateway processes and unexpected PowerShell or
+  command execution originating from Citrix-related processes (T1133 / T1190).
+references:
+  - https://www.halcyon.ai/ransomware-alerts/inc-ransom-group-mounts-rapid-campaign-against-law-firms
+  - https://attack.mitre.org/techniques/T1133/
+author: VeilHunter - Legal Sector APT
+date: 2026-03-25
+tags:
+  - attack.initial_access
+  - attack.t1133
+  - attack.t1190
+  - tlp:white
+  - actor:inc_ransom
+  - cve:CVE-2023-4966
+  - sector:legal
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_citrix_parent:
+    ParentImage|contains:
+      - 'Citrix'
+      - 'XenApp'
+      - 'NetScaler'
+      - 'CtxSvc'
+      - 'WfShell'
+  selection_shell_child:
+    Image|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+      - '\pwsh.exe'
+      - '\wscript.exe'
+      - '\net.exe'
+      - '\nltest.exe'
+  condition: selection_citrix_parent and selection_shell_child
+falsepositives:
+  - Citrix published application launchers that spawn shells legitimately
+level: high

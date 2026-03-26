@@ -1,0 +1,51 @@
+title: Silent Ransom Group - Callback Phishing RMM Download Chain
+id: dd04ee05-ff06-4001-1122-003300440dd
+status: experimental
+description: >
+  Detects the process chain characteristic of Silent Ransom Group callback
+  phishing attacks: a browser or email client spawning a download of an RMM
+  installer, which then installs and runs a remote access tool. The group
+  contacts law firm staff by phone posing as IT support and talks them through
+  installing AnyDesk or similar tools. This rule catches the download+execute
+  chain from a user-initiated browser session (T1566.004 / T1219).
+references:
+  - https://www.ic3.gov/CSA/2025/250523.pdf
+  - https://www.fbi.gov/file-repository/cyber-alerts/silent-ransom-group-targeting-law-firms-052325.pdf/view
+author: VeilHunter - Legal Sector APT
+date: 2026-03-25
+tags:
+  - attack.initial_access
+  - attack.t1566.004
+  - attack.t1219
+  - tlp:white
+  - actor:silent_ransom_group
+  - sector:legal
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_browser_parent:
+    ParentImage|endswith:
+      - '\chrome.exe'
+      - '\msedge.exe'
+      - '\firefox.exe'
+      - '\iexplore.exe'
+      - '\brave.exe'
+      - '\opera.exe'
+      - '\outlook.exe'
+  selection_rmm_child:
+    Image|endswith:
+      - '\AnyDesk.exe'
+      - '\anydesk.exe'
+      - '\ZohoAssist.exe'
+      - '\msiexec.exe'
+    CommandLine|contains:
+      - 'AnyDesk'
+      - 'ZohoAssist'
+      - 'ScreenConnect'
+      - 'Atera'
+      - 'Splashtop'
+  condition: selection_browser_parent and selection_rmm_child
+falsepositives:
+  - Intentional IT-managed RMM deployments via browser-based download portals
+level: high

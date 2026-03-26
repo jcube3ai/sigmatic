@@ -1,0 +1,41 @@
+title: Play Ransomware - AdFind Active Directory Enumeration
+id: aa04bb05-cc06-4dd0-ee07-00cc00dd0aa
+status: experimental
+description: >
+  Detects AdFind.exe being used for Active Directory reconnaissance, a
+  technique specifically documented in CISA/FBI Play ransomware advisories.
+  Play ransomware actors run AdFind to enumerate domain topology, identify
+  admin accounts, and map the network before lateral movement and ransomware
+  deployment. This is consistently observed in law firm compromises (T1018 / T1069.002).
+references:
+  - https://www.cisa.gov/sites/default/files/2025-06/aa23-352a-stopransomware-play-ransomware_2_revised.pdf
+  - https://attack.mitre.org/techniques/T1018/
+author: VeilHunter - Legal Sector APT
+date: 2026-03-25
+tags:
+  - attack.discovery
+  - attack.t1018
+  - attack.t1069.002
+  - attack.t1087.002
+  - tlp:white
+  - actor:play_ransomware
+  - sector:legal
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_binary:
+    Image|endswith: '\AdFind.exe'
+  selection_renamed:
+    CommandLine|contains:
+      - 'objectcategory=computer'
+      - 'objectcategory=person'
+      - 'objectcategory=group'
+      - '-f objectcategory'
+      - 'cn=domain admins'
+      - '-sc dclist'
+      - '-gcb'
+  condition: selection_binary or selection_renamed
+falsepositives:
+  - Authorised AD administrators using AdFind for legitimate enumeration
+level: high

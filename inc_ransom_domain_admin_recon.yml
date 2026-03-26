@@ -1,0 +1,57 @@
+title: INC Ransom - Domain Admin Account Scanning and Enumeration
+id: aa07bb08-cc09-4dd0-ee01-006600770aa
+status: experimental
+description: >
+  Detects domain administrator account enumeration as observed in INC Ransom
+  incidents. MITRE ATT&CK documents that INC Ransom specifically scans for
+  domain admin accounts after gaining initial access. This covers net.exe
+  queries for domain admins, PowerShell AD module enumeration, and AdFind
+  tool usage. Escalation to domain admin is the prerequisite for deploying
+  ransomware across a law firm network (T1069.002 / T1087.002).
+references:
+  - https://attack.mitre.org/groups/G1032/
+  - https://attack.mitre.org/techniques/T1069/002/
+author: VeilHunter - Legal Sector APT
+date: 2026-03-25
+tags:
+  - attack.discovery
+  - attack.t1069.002
+  - attack.t1087.002
+  - tlp:white
+  - actor:inc_ransom
+  - sector:legal
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection_net_admins:
+    Image|endswith:
+      - '\net.exe'
+      - '\net1.exe'
+    CommandLine|contains:
+      - 'group'
+      - 'domain admins'
+      - 'Domain Admins'
+      - 'enterprise admins'
+      - 'schema admins'
+  selection_adfind:
+    Image|endswith: '\AdFind.exe'
+  selection_adfind_named:
+    CommandLine|contains:
+      - 'adfind'
+      - 'AdFind'
+    CommandLine|contains:
+      - 'objectcategory'
+      - 'cn=domain admins'
+  selection_powershell_ad:
+    Image|endswith:
+      - '\powershell.exe'
+      - '\pwsh.exe'
+    CommandLine|contains:
+      - 'Get-ADGroupMember'
+      - 'Domain Admins'
+      - 'net localgroup administrators'
+  condition: selection_net_admins or selection_adfind or selection_adfind_named or selection_powershell_ad
+falsepositives:
+  - Legitimate AD administrators auditing group membership
+level: medium
