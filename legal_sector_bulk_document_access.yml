@@ -1,0 +1,48 @@
+title: Legal Sector - Bulk Document Access from Single Process
+id: dd04ee05-ff06-4001-1122-00ff00001dd
+status: experimental
+description: >
+  Detects a non-document-application process opening an unusually high volume
+  of document files (PDF, DOCX, XLSX, MSG) in a short timeframe. This is
+  consistent with data staging activity observed in law firm attacks where
+  adversaries enumerate and stage client matter files before exfiltration.
+  Both Silent Ransom Group and INC Ransom specifically target document
+  repositories before demanding payment (T1005 / T1074).
+references:
+  - https://attack.mitre.org/techniques/T1005/
+  - https://attack.mitre.org/techniques/T1074/
+author: VeilHunter - Legal Sector APT
+date: 2026-03-25
+tags:
+  - attack.collection
+  - attack.t1005
+  - attack.t1074
+  - tlp:white
+  - sector:legal
+logsource:
+  product: windows
+  category: file_access
+detection:
+  selection:
+    Image|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+      - '\xcopy.exe'
+      - '\robocopy.exe'
+      - '\7z.exe'
+      - '\WinRAR.exe'
+      - '\rclone.exe'
+    TargetFilename|endswith:
+      - '.pdf'
+      - '.docx'
+      - '.doc'
+      - '.xlsx'
+      - '.xls'
+      - '.msg'
+      - '.pst'
+      - '.eml'
+  condition: selection | count(TargetFilename) by Image > 100
+timeframe: 5m
+falsepositives:
+  - Backup software, search indexing, legitimate bulk document processing
+level: high

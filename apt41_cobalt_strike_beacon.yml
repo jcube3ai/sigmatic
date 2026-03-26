@@ -1,0 +1,39 @@
+title: APT41 - Cobalt Strike Beacon Named Pipe and Process Injection
+id: aa01bb02-cc03-4dd0-ee04-00cc00dd0aa
+status: experimental
+description: >
+  Detects Cobalt Strike Beacon activity consistent with APT41 post-exploitation
+  frameworks. APT41 is a well-documented Cobalt Strike operator. Indicators
+  include characteristic named pipes (msagent_, postex_) and the process
+  injection pattern of legitimate processes (svchost, rundll32) allocating
+  executable memory without a corresponding loaded module (T1055 / T1572).
+references:
+  - https://attack.mitre.org/groups/G0096/
+  - https://attack.mitre.org/techniques/T1055/
+  - https://attack.mitre.org/techniques/T1572/
+author: VeilHunter - Legal Sector APT
+date: 2026-03-25
+tags:
+  - attack.execution
+  - attack.command_and_control
+  - attack.t1055
+  - attack.t1572
+  - tlp:white
+  - actor:apt41
+  - sector:legal
+logsource:
+  product: windows
+  category: pipe_created
+detection:
+  selection_cs_pipes:
+    PipeName|startswith:
+      - '\msagent_'
+      - '\postex_'
+      - '\mojo.'
+      - '\MSSE-'
+      - '\status_'
+      - '\halfduplex_'
+  condition: selection_cs_pipes
+falsepositives:
+  - Authorised red team exercises - verify with security team
+level: critical

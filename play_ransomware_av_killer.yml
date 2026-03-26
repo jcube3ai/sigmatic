@@ -1,0 +1,36 @@
+title: Play Ransomware - Security Tool Disablement (GMER/IOBit/PowerTool)
+id: cc06dd07-ee08-4ff0-aa09-00ee00ff0cc
+status: experimental
+description: >
+  Detects the use of GMER, IOBit Unlocker, or PowerTool - tools specifically
+  used by Play ransomware actors to disable and remove antivirus software
+  before ransomware deployment. The CISA/FBI joint advisory documents these
+  as the primary AV killer tools used by Play affiliates (T1562.001 / T1070.001).
+references:
+  - https://www.cisa.gov/sites/default/files/2025-06/aa23-352a-stopransomware-play-ransomware_2_revised.pdf
+  - https://attack.mitre.org/techniques/T1562/001/
+author: VeilHunter - Legal Sector APT
+date: 2026-03-25
+tags:
+  - attack.defense_evasion
+  - attack.t1562.001
+  - attack.t1070.001
+  - tlp:white
+  - actor:play_ransomware
+  - sector:legal
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection:
+    Image|endswith:
+      - '\gmer.exe'
+      - '\GMER.exe'
+      - '\IObit Unlocker.exe'
+      - '\IObitUnlocker.exe'
+      - '\PowerTool.exe'
+      - '\PowerTool64.exe'
+  condition: selection
+falsepositives:
+  - Security researchers using these tools in authorised testing
+level: high
