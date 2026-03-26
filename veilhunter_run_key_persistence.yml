@@ -1,0 +1,39 @@
+title: VeilHunter - Suspicious Registry Run Key Written
+id: a1b2c3d4-0001-4e5f-8a9b-0c1d2e3f4a5b
+status: experimental
+description: >
+  Detects a registry value being written to a Run or RunOnce autostart key
+  by a process that is not a known software installer or system updater.
+  Adversaries use Run keys to maintain persistence across reboots (T1547.001).
+references:
+  - https://attack.mitre.org/techniques/T1547/001/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.persistence
+  - attack.t1547.001
+logsource:
+  product: windows
+  category: registry_set
+detection:
+  selection:
+    TargetObject|contains:
+      - '\Software\Microsoft\Windows\CurrentVersion\Run\'
+      - '\Software\Microsoft\Windows\CurrentVersion\RunOnce\'
+      - '\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Run\'
+      - '\Software\Microsoft\Windows\CurrentVersion\RunServices\'
+  filter_legit_installers:
+    Image|contains:
+      - '\Windows\System32\msiexec.exe'
+      - '\Windows\SysWOW64\msiexec.exe'
+      - '\Program Files\'
+      - '\Program Files (x86)\'
+  filter_system:
+    Image|contains:
+      - '\Windows\System32\svchost.exe'
+      - '\Windows\regedit.exe'
+  condition: selection and not filter_legit_installers and not filter_system
+falsepositives:
+  - Legitimate software installations writing Run key entries
+  - Administrative scripts managing startup programs
+level: medium

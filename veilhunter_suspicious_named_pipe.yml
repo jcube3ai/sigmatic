@@ -1,0 +1,35 @@
+title: VeilHunter - Named Pipe Matching C2 Framework Pattern
+id: c7d8e9f0-0403-4a0b-4c5d-2c9d43d30403
+status: experimental
+description: >
+  Detects creation or access of named pipes that match patterns used by
+  known C2 frameworks including Cobalt Strike (msagent_, postex_, mojo.),
+  Metasploit Meterpreter, Sliver, Empire, and Havoc. Mapped to T1572.
+references:
+  - https://attack.mitre.org/techniques/T1572/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.command_and_control
+  - attack.t1572
+logsource:
+  product: windows
+  category: pipe_created
+detection:
+  selection:
+    PipeName|contains:
+      - 'msagent_'
+      - 'postex_'
+      - 'mojo.'
+      - 'MSSE-'
+      - 'meterpreter'
+      - 'beacon'
+      - 'havoc'
+      - 'sliver'
+      - 'empire'
+      - 'cobaltstrike'
+      - 'status_'
+  condition: selection
+falsepositives:
+  - Security testing in authorized red team engagements
+level: critical

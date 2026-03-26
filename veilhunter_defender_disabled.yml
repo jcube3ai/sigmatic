@@ -1,0 +1,28 @@
+title: VeilHunter - Windows Defender Disabled via Registry
+id: f8a9b0c1-0303-4d1e-5f6a-2f0454a40303
+status: experimental
+description: >
+  Detects the DisableAntiSpyware or DisableRealtimeMonitoring registry
+  values being set under Windows Defender policy keys. This is a common
+  pre-execution step for malware to avoid detection (T1562.001).
+references:
+  - https://attack.mitre.org/techniques/T1562/001/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.defense_evasion
+  - attack.t1562.001
+logsource:
+  product: windows
+  category: registry_set
+detection:
+  selection_disable:
+    TargetObject|endswith: '\Windows Defender\DisableAntiSpyware'
+    Details: 'DWORD (0x00000001)'
+  selection_rtp:
+    TargetObject|endswith: '\Windows Defender\Real-Time Protection\DisableRealtimeMonitoring'
+    Details: 'DWORD (0x00000001)'
+  condition: selection_disable or selection_rtp
+falsepositives:
+  - Managed environments explicitly disabling Defender in favor of another AV
+level: high

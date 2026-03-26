@@ -1,0 +1,41 @@
+title: VeilHunter - LSASS Memory Access by Non-System Process
+id: a1b2c3d4-0101-4e5f-8a9b-ca1de2f30101
+status: experimental
+description: >
+  Detects a process accessing lsass.exe memory with rights typically used
+  for credential dumping (PROCESS_VM_READ). Excludes known legitimate
+  system processes. Mapped to T1003.001.
+references:
+  - https://attack.mitre.org/techniques/T1003/001/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.credential_access
+  - attack.t1003.001
+logsource:
+  product: windows
+  category: process_access
+detection:
+  selection:
+    TargetImage|endswith: '\lsass.exe'
+    GrantedAccess|contains:
+      - '0x1010'
+      - '0x1410'
+      - '0x147a'
+      - '0x143a'
+      - '0x1438'
+      - '0x1fffff'
+  filter_legit:
+    SourceImage|contains:
+      - '\Windows\System32\svchost.exe'
+      - '\Windows\System32\werfault.exe'
+      - '\Windows\System32\csrss.exe'
+      - '\Windows\System32\wininit.exe'
+      - '\Windows\System32\lsm.exe'
+      - '\Windows\System32\taskhost.exe'
+      - '\Windows\System32\mrt.exe'
+      - '\Windows\CCM\CmRcService.exe'
+  condition: selection and not filter_legit
+falsepositives:
+  - AV/EDR products, crash reporting tools
+level: high

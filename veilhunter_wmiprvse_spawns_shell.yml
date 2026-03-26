@@ -1,0 +1,33 @@
+title: VeilHunter - WMI Provider Host Spawning Command Shell
+id: a3b4c5d6-0205-4e6f-0a1b-7ad909f50205
+status: experimental
+description: >
+  Detects wmiprvse.exe (WMI provider host) spawning cmd.exe, PowerShell,
+  wscript, cscript, or mshta. This parent-child relationship is a strong
+  indicator of WMI-based remote code execution (T1047).
+references:
+  - https://attack.mitre.org/techniques/T1047/
+author: VeilHunter
+date: 2026-03-25
+tags:
+  - attack.lateral_movement
+  - attack.execution
+  - attack.t1047
+logsource:
+  product: windows
+  category: process_creation
+detection:
+  selection:
+    ParentImage|endswith: '\wmiprvse.exe'
+    Image|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+      - '\pwsh.exe'
+      - '\wscript.exe'
+      - '\cscript.exe'
+      - '\mshta.exe'
+      - '\rundll32.exe'
+  condition: selection
+falsepositives:
+  - Some WMI-based management tools legitimately spawn child processes
+level: high
