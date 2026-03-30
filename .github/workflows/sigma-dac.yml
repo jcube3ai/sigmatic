@@ -6,11 +6,13 @@ on:
     paths:
       - '**.yml'
       - '!.github/**'
+      - 'requirements.txt'
   pull_request:
     branches: [main]
     paths:
       - '**.yml'
       - '!.github/**'
+      - 'requirements.txt'
 
 jobs:
   # ── JOB 1: VALIDATE ───────────────────────────────────────
