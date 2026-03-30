@@ -1,0 +1,171 @@
+name: Sigma Detection-as-Code Pipeline
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**.yml'
+      - '!.github/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - '**.yml'
+      - '!.github/**'
+
+jobs:
+  # ── JOB 1: VALIDATE ───────────────────────────────────────
+  validate:
+    name: Validate Sigma Rules
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Lint YAML syntax
+        run: |
+          echo "Running yamllint on all Sigma rules..."
+          yamllint -c .yamllint.yml *.yml
+          echo "YAML lint passed."
+
+      - name: Validate Sigma rule structure
+        run: |
+          echo "Validating Sigma rules with sigma-cli..."
+          sigma check *.yml
+          echo "All Sigma rules passed validation."
+
+  # ── JOB 2: CONVERT ────────────────────────────────────────
+  convert:
+    name: Convert to Platform Query Languages
+    runs-on: ubuntu-latest
+    needs: validate  # Only runs if validate passes
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Convert rules to Splunk SPL
+        run: |
+          mkdir -p output/splunk
+          echo "Converting to Splunk SPL..."
+          sigma convert \
+            -t splunk \
+            -f savedsearches \
+            --skip-unsupported \
+            *.yml \
+            -o output/splunk/sigmatic_splunk.conf
+          echo "Splunk conversion complete."
+
+      - name: Convert rules to Microsoft Sentinel KQL
+        run: |
+          mkdir -p output/sentinel
+          echo "Converting to Microsoft Sentinel KQL..."
+          sigma convert \
+            -t microsoft365defender \
+            --skip-unsupported \
+            *.yml \
+            -o output/sentinel/sigmatic_sentinel.kql
+          echo "Sentinel conversion complete."
+
+      - name: Convert rules to Cortex XDR / XSIAM XQL
+        run: |
+          mkdir -p output/xsiam
+          echo "Converting to Cortex XSIAM XQL..."
+          sigma convert \
+            -t cortexxdr \
+            --skip-unsupported \
+            *.yml \
+            -o output/xsiam/sigmatic_xsiam.xql
+          echo "XSIAM conversion complete."
+
+      - name: Convert rules to QRadar AQL
+        run: |
+          mkdir -p output/qradar
+          echo "Converting to QRadar AQL..."
+          sigma convert \
+            -t qradar \
+            --skip-unsupported \
+            *.yml \
+            -o output/qradar/sigmatic_qradar.aql
+          echo "QRadar conversion complete."
+
+      - name: Generate conversion summary
+        run: |
+          echo "## Conversion Summary" > output/SUMMARY.md
+          echo "" >> output/SUMMARY.md
+          echo "| Platform | Output File | Rules Converted |" >> output/SUMMARY.md
+          echo "|----------|-------------|-----------------|" >> output/SUMMARY.md
+
+          for platform in splunk sentinel xsiam qradar; do
+            file=$(ls output/$platform/ 2>/dev/null | head -1)
+            if [ -f "output/$platform/$file" ]; then
+              count=$(grep -c "title\|savedSearch\|let\|SELECT" output/$platform/$file 2>/dev/null || echo "see file")
+              echo "| $platform | $file | generated |" >> output/SUMMARY.md
+            fi
+          done
+
+          cat output/SUMMARY.md
+
+      - name: Upload converted rules as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: sigmatic-converted-rules-${{ github.sha }}
+          path: output/
+          retention-days: 30
+
+  # ── JOB 3: PR COMMENT (pull requests only) ────────────────
+  pr-summary:
+    name: Post PR Summary
+    runs-on: ubuntu-latest
+    needs: convert
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: sigmatic-converted-rules-${{ github.sha }}
+          path: output/
+
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            let summary = '';
+            try {
+              summary = fs.readFileSync('output/SUMMARY.md', 'utf8');
+            } catch (e) {
+              summary = 'Conversion completed — see artifacts for output files.';
+            }
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `## Sigmatic DaC Pipeline Results\n\n✅ Validation passed\n✅ Rules converted to SPL, KQL, XQL, AQL\n\n${summary}\n\n📦 Download converted rules from the [Actions artifacts](${context.payload.pull_request.html_url}/checks).`
+            });
