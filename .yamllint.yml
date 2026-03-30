@@ -21,3 +21,6 @@ rules:
   document-start:
     present: false
     level: warning
+  key-duplicates:
+    forbid-duplicated-merge-keys: false
+    level: warning
