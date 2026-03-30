@@ -1,11 +1,6 @@
-# Sigma CLI and backends for Detection-as-Code pipeline
-sigma-cli>=0.10.0
-
-# SIEM/platform backends
-pySigma-backend-splunk>=1.0.0
-pySigma-backend-microsoft365defender>=1.0.0
-pySigma-backend-cortexxdr>=1.0.0
-pySigma-backend-qradar>=1.0.0
-
-# YAML linting
-yamllint>=1.35.0
+sigma-cli
+pySigma-backend-splunk
+pySigma-backend-microsoft365defender
+pySigma-backend-cortexxdr
+pySigma-backend-qradar
+yamllint
