@@ -1,3 +1,4 @@
+pyparsing==3.1.4
 sigma-cli
 pySigma-backend-splunk
 pySigma-backend-microsoft365defender
