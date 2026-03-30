@@ -1,6 +1,6 @@
 title: VeilHunter - LSASS Memory Access by Non-System Process
 id: a1b2c3d4-0101-4e5f-8a9b-ca1de2f30101
-status: experimental
+status: experimental jcube3ai
 description: >
   Detects a process accessing lsass.exe memory with rights typically used
   for credential dumping (PROCESS_VM_READ). Excludes known legitimate
