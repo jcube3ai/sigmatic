@@ -47,11 +47,11 @@ jobs:
           sigma check *.yml
           echo "All Sigma rules passed validation."
 
-  # ── JOB 2: CONVERT ────────────────────────────────────────
+# ── JOB 2: CONVERT ────────────────────────────────────────
   convert:
     name: Convert to Platform Query Languages
     runs-on: ubuntu-latest
-    needs: validate  # Only runs if validate passes
+    needs: validate
 
     steps:
       - name: Checkout repository
@@ -71,7 +71,7 @@ jobs:
           echo "Converting to Splunk SPL..."
           sigma convert \
             -t splunk \
-            -f savedsearches \
+            --without-pipeline \
             --skip-unsupported \
             *.yml \
             -o output/splunk/sigmatic_splunk.conf
@@ -83,6 +83,7 @@ jobs:
           echo "Converting to Microsoft Sentinel KQL..."
           sigma convert \
             -t microsoft365defender \
+            --without-pipeline \
             --skip-unsupported \
             *.yml \
             -o output/sentinel/sigmatic_sentinel.kql
@@ -94,6 +95,7 @@ jobs:
           echo "Converting to Cortex XSIAM XQL..."
           sigma convert \
             -t cortexxdr \
+            --without-pipeline \
             --skip-unsupported \
             *.yml \
             -o output/xsiam/sigmatic_xsiam.xql
@@ -105,6 +107,7 @@ jobs:
           echo "Converting to QRadar AQL..."
           sigma convert \
             -t qradar \
+            --without-pipeline \
             --skip-unsupported \
             *.yml \
             -o output/qradar/sigmatic_qradar.aql
@@ -116,15 +119,12 @@ jobs:
           echo "" >> output/SUMMARY.md
           echo "| Platform | Output File | Rules Converted |" >> output/SUMMARY.md
           echo "|----------|-------------|-----------------|" >> output/SUMMARY.md
-
           for platform in splunk sentinel xsiam qradar; do
             file=$(ls output/$platform/ 2>/dev/null | head -1)
             if [ -f "output/$platform/$file" ]; then
-              count=$(grep -c "title\|savedSearch\|let\|SELECT" output/$platform/$file 2>/dev/null || echo "see file")
               echo "| $platform | $file | generated |" >> output/SUMMARY.md
             fi
           done
-
           cat output/SUMMARY.md
 
       - name: Upload converted rules as artifacts
@@ -133,7 +133,6 @@ jobs:
           name: sigmatic-converted-rules-${{ github.sha }}
           path: output/
           retention-days: 30
-
   # ── JOB 3: PR COMMENT (pull requests only) ────────────────
   pr-summary:
     name: Post PR Summary
