@@ -1,0 +1,21 @@
+title: Vidar Infostealer - SC.exe Called with Numeric Garbage Arguments
+id: d4e5f6a7-b8c9-0123-defa-234567890123
+status: experimental
+description: Detects sc.exe invoked with purely numeric arguments, a pattern observed
+  in Vidar campaigns as an anti-analysis or process injection decoy technique.
+author: jcube3ai
+date: 2026-04-06
+tags:
+  - attack.defense_evasion
+  - attack.t1562
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection:
+    Image|endswith: '\sc.exe'
+    CommandLine|re: 'sc(\.exe)?\s+[0-9]+(\s+[0-9]+)*\s*$'
+  condition: selection
+falsepositives:
+  - Unknown - set to experimental pending baseline testing
+level: medium
