@@ -1,59 +1,24 @@
-title: BlueHammer-style Windows Defender TOCTOU LPE (Reparse Point + SAM Access)
-id: 9a7b3c2d-1e4f-5g6h-7i8j-9k0l1m2n3o4p
+title: BlueHammer - Windows Defender TOCTOU Local Privilege Escalation
+id: e5f6a7b8-c9d0-1234-efab-345678901234
 status: experimental
-description: Detects TOCTOU race + path confusion via junctions/reparse points in Defender update paths leading to privileged SAM access or SYSTEM shell spawn
-references:
-  - https://www.bleepingcomputer.com/news/security/disgruntled-researcher-leaks-bluehammer-windows-zero-day-exploit/
-author: Jcube3ai (custom PoC defensive research)
+description: Detects indicators of a TOCTOU race condition exploit targeting
+  Windows Defender scan operations to achieve local privilege escalation.
+author: jcube3ai
 date: 2026-04-07
-logsource:
-  category: 
-    - process_creation
-    - file_create
-    - file_access
-  product: windows
-detection:
-  # 1. Junction/reparse point creation in Defender-watched directories (Sysmon Event 17)
-  reparse_creation:
-    EventID: 17
-    Image|contains: 
-      - 'Windows Defender'
-      - '\ProgramData\Microsoft\Windows Defender'
-      - '\Definition Updates'
-    TargetFilename|contains:
-      - '\ProgramData\Microsoft\Windows Defender\'
-      - '\Definition Updates\'
-      - 'config\SAM'
-      - 'HarddiskVolumeShadowCopy'
-  # 2. MsMpEng.exe (SYSTEM) accessing protected hives via unexpected paths
-  defender_sam_access:
-    Image|endswith: '\MsMpEng.exe'
-    TargetFilename|contains:
-      - '\SAM'
-      - '\SECURITY'
-      - '\SYSTEM'
-      - 'HarddiskVolumeShadowCopy'
-  # 3. Low-privilege parent spawning SYSTEM integrity child (cmd/powershell)
-  system_shell_spawn:
-    EventID: 1
-    ParentImage|contains: 
-      - '\cmd.exe'
-      - '\powershell.exe'
-      - '\pwsh.exe'
-      - '\explorer.exe'  # common low-priv launcher
-    NewProcessName|endswith:
-      - '\cmd.exe'
-      - '\powershell.exe'
-      - '\pwsh.exe'
-    IntegrityLevel: 'System'
-    # Optional: exclude known legitimate parents
-    ParentImage|not contains: 
-      - '\MsMpEng.exe'
-      - '\svchost.exe'
-  condition: reparse_creation or (defender_sam_access and system_shell_spawn)
-falsepositives:
-  - Rare legitimate Defender update operations (tune with baselines)
-level: high
 tags:
   - attack.privilege_escalation
   - attack.t1068
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection:
+    ParentImage|endswith: '\MsMpEng.exe'
+    Image|endswith:
+      - '\cmd.exe'
+      - '\powershell.exe'
+      - '\rundll32.exe'
+  condition: selection
+falsepositives:
+  - Unknown - experimental pending baseline
+level: high
