@@ -17,7 +17,6 @@ tags:
   - attack.defense_evasion
   - attack.persistence
   - attack.t1574.002
-  - tlp.white
   - actor.apt41
   - sector.legal
 logsource:
