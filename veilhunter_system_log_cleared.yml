@@ -1,5 +1,5 @@
 title: VeilHunter - Windows System Event Log Cleared
-id: c1d2e3f4-0306-4a4b-8c9d-5c3787d70306
+id: 6e192d74-cf47-4a2a-8c48-4209e746195f
 status: experimental
 description: >
   Detects clearing of the Windows System event log (EventID 104).
