@@ -1,4 +1,4 @@
-sigma-cli
+sigma-cli==2.0.2
 pySigma-backend-splunk
 pySigma-backend-microsoft365defender
 pySigma-backend-qradar
