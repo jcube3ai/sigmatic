@@ -1,5 +1,5 @@
 title: VeilHunter - Unsigned DLL Created in System32
-id: f4a5b6c7-0309-4d7e-1f2a-8f6a10a00309
+id: fa0e2ec1-ca92-45e6-8d79-eb04af3781d1
 status: experimental
 description: >
   Detects a DLL file being created in System32 or SysWOW64 without a
