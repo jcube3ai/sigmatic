@@ -1,5 +1,5 @@
 title: VeilHunter - Executable Written to Startup Folder
-id: d0e1f2a3-0010-4b3c-7d8e-9f0a1b2c3d4e
+id: ad43a30a-7c1c-46cb-ae48-1a15bc2b8227
 status: experimental
 description: >
   Detects a script or executable being written to a Windows Startup folder.
