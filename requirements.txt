@@ -6,3 +6,4 @@ pySigma-backend-cortexxdr
 pySigma-pipeline-windows
 pySigma-pipeline-sysmon
 yamllint
+pyparsing<3.0.0
