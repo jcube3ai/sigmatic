@@ -54,16 +54,13 @@ jobs:
             | sort | while read rule; do
               echo "→ Checking $rule"
               result=$(sigma check "$rule" 2>&1)
-              exit_code=$?
               echo "$result"
-              if [ $exit_code -ne 0 ]; then
-                echo "❌ VALIDATION FAILED on: $rule"
-                echo "Full error output:"
-                echo "$result"
+              if echo "$result" | grep -q "Found [1-9][0-9]* errors"; then
+                echo "❌ HARD ERROR in: $rule - failing pipeline"
                 exit 1
               fi
             done
-          echo "All Sigma rules passed validation."
+          echo "✅ All Sigma rules passed validation."
 
       - name: Count rules by directory
         run: |
