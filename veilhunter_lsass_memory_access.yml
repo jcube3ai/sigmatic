@@ -1,5 +1,5 @@
 title: VeilHunter - LSASS Memory Access by Non-System Process
-id: a1b2c3d4-0101-4e5f-8a9b-ca1de2f30101
+id: 47f6af22-e537-4eed-8f15-050b80585956
 status: experimental
 description: >
   Detects a process accessing lsass.exe memory with rights typically used
