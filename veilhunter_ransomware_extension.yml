@@ -1,5 +1,5 @@
 title: VeilHunter - Known Ransomware File Extension Created
-id: f6a7b8c9-0505-4d9e-3f4a-bf56dc6c0505
+id: 4202d81d-045d-42ad-a84f-9ce801d91123
 status: experimental
 description: >
   Detects files being created with extensions associated with known
