@@ -18,7 +18,6 @@ tags:
   - attack.command_and_control
   - attack.t1055
   - attack.t1572
-  - tlp.clear
   - actor.apt41
   - sector.legal
 logsource:
