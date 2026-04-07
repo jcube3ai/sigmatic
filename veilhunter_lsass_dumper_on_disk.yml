@@ -1,5 +1,5 @@
 title: VeilHunter - Known LSASS Credential Dumper Tool on Disk
-id: b2c3d4e5-0102-4f6a-9b0c-cb2ef3a40102
+id: ce4b7983-3de4-442a-8526-dd96fa068a3a
 status: experimental
 description: >
   Detects the creation of a file whose name matches a known LSASS
