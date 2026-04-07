@@ -1,5 +1,5 @@
 title: VeilHunter - DNS over HTTPS Enabled via Registry
-id: f0a1b2c3-0406-4d3e-7f8a-5f0076060406
+id: 76c43b79-8501-4bfe-a9da-82dc37b1d426
 status: experimental
 description: >
   Detects EnableAutoDoh being set to 2 in the DNS client configuration,
