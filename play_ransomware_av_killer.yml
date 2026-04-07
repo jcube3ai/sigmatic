@@ -15,9 +15,9 @@ tags:
   - attack.defense_evasion
   - attack.t1562.001
   - attack.t1070.001
-  - tlp:white
-  - actor:play_ransomware
-  - sector:legal
+  - tlp.white
+  - actor.play_ransomware
+  - sector.legal
 logsource:
   product: windows
   category: process_creation
