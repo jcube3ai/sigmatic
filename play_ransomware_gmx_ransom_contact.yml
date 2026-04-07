@@ -1,5 +1,5 @@
 title: Play Ransomware - Ransom Note with GMX/WEB.DE Contact Address
-id: dd07ee08-ff09-4aa0-bb01-00ff00aa0dd
+id: ad73ff60-f632-4e3d-96d0-6d2a7148c95c
 status: experimental
 description: >
   Detects the creation of a Play ransomware ransom note. Play ransomware
