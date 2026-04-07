@@ -15,10 +15,10 @@ date: 2026-03-25
 tags:
   - attack.impact
   - attack.t1490
-  - tlp:white
-  - actor:lynx_ransomware
-  - actor:inc_ransom
-  - sector:legal
+  - tlp.white
+  - actor.lynx_ransomware
+  - actor.inc_ransom
+  - sector.legal
 logsource:
   product: windows
   category: process_creation
