@@ -1,5 +1,5 @@
 title: VeilHunter - PowerShell Script Block Logging Disabled
-id: e7f8a9b0-0302-4c0d-4e5f-1ef343390302
+id: c54a2246-36e0-4093-bb8d-c4fe148a69dc
 status: experimental
 description: >
   Detects the disabling of PowerShell ScriptBlock logging via group policy
