@@ -1,5 +1,5 @@
 title: VeilHunter - Windows Defender Disabled via Registry
-id: f8a9b0c1-0303-4d1e-5f6a-2f0454a40303
+id: 61f70440-6abf-4821-ae78-4b3653022fd0
 status: experimental
 description: >
   Detects the DisableAntiSpyware or DisableRealtimeMonitoring registry
