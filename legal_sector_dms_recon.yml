@@ -14,10 +14,8 @@ references:
 author: VeilHunter - Legal Sector APT
 date: 2026-03-25
 tags:
-  - attack.collection
   - attack.t1005
   - attack.t1213
-  - sector:legal
 logsource:
   product: windows
   category: process_creation
