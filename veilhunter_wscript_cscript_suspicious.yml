@@ -1,5 +1,5 @@
 title: VeilHunter - Wscript/Cscript Executing Script from Staging Path
-id: f2a3b4c5-0605-4d5e-9f0a-15bcd2c20605
+id: a1763521-2808-4aea-8d2d-b3e36d6262ca
 status: experimental
 description: >
   Detects wscript.exe or cscript.exe executing a script file located in
