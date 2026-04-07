@@ -1,5 +1,5 @@
 title: VeilHunter - Ransom Note File Created
-id: e5f6a7b8-0504-4c8d-2e3f-ae45cb5b0504
+id: 55eadd11-a7e9-4cfd-a680-a9d807473510
 status: experimental
 description: >
   Detects the creation of files matching common ransomware note naming
