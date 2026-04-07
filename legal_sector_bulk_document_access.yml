@@ -17,7 +17,6 @@ tags:
   - attack.collection
   - attack.t1005
   - attack.t1074
-  - tlp.white
   - sector.legal
 logsource:
   product: windows
