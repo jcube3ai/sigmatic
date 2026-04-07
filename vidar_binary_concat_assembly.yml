@@ -1,5 +1,5 @@
 title: Vidar Infostealer - DLL Reassembly via Copy Binary Concatenation
-id: b2c3d4e5-f6a7-8901-bcde-f12345678901
+id: d4feb489-83d6-480f-bf73-561598144670
 status: stable
 description: Detects the use of copy /b to concatenate multiple files with non-binary
   extensions into a single output file, used by Vidar to reassemble DLL fragments
