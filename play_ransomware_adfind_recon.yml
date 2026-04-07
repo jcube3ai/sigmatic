@@ -1,5 +1,5 @@
 title: Play Ransomware - AdFind Active Directory Enumeration
-id: aa04bb05-cc06-4dd0-ee07-00cc00dd0aa
+id: b345a278-85f5-44e5-9a2c-21f84ce018a7
 status: experimental
 description: >
   Detects AdFind.exe being used for Active Directory reconnaissance, a
