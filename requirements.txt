@@ -1,4 +1,6 @@
 sigma-cli
+pySigma==1.2.0
+pyparsing==3.1.4
 pySigma-backend-splunk
 pySigma-backend-microsoft365defender
 pySigma-backend-qradar
