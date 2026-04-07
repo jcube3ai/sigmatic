@@ -1,5 +1,5 @@
 title: VeilHunter - IFEO Debugger Hijack
-id: c9d0e1f2-0009-4a2b-6c7d-8e9f0a1b2c3d
+id: 34af5675-f331-4b08-981b-6bfad69a3842
 status: experimental
 description: >
   Detects a Debugger value being set under Image File Execution Options
