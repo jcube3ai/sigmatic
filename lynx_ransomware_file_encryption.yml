@@ -1,5 +1,5 @@
 title: Lynx Ransomware - File Encryption Activity (INC Variant)
-id: ee02ff03-aa04-4bb0-cc05-00aa00bb0ee
+id: 4ecaf024-d9f2-4454-acf8-837d7755b84e
 status: experimental
 description: >
   Detects Lynx ransomware file encryption activity. Lynx is a rebranded
