@@ -1,5 +1,5 @@
 title: VeilHunter - WMIC Process Create for Remote Execution
-id: e7f8a9b0-0610-4c0d-4e5f-6a1217170610
+id: 07d8d195-b5c9-47eb-8297-a1a9e9c77021
 status: experimental
 description: >
   Detects wmic.exe being used with "process call create" to execute
