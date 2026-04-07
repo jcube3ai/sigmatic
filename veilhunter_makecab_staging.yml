@@ -1,5 +1,5 @@
 title: VeilHunter - Makecab Used to Archive Sensitive Files
-id: d6e7f8a9-0609-4b9c-3d4e-590106060609
+id: 81f9b2e0-892b-4cd3-bc96-dc9685dc0989
 status: experimental
 description: >
   Detects makecab.exe being used to create an archive containing
