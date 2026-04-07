@@ -1,5 +1,5 @@
 title: VeilHunter - AppInit_DLLs Value Set
-id: f2a3b4c5-0012-4d5e-9f0a-1b2c3d4e5f6a
+id: dac57fde-9a78-4664-85b2-68804405aa3e
 status: experimental
 description: >
   Detects a value being written to the AppInit_DLLs registry key.
