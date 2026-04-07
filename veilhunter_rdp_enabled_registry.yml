@@ -1,5 +1,5 @@
 title: VeilHunter - RDP Enabled via Registry Modification
-id: c5d6e7f8-0207-4a8b-2c3d-9cf121170207
+id: fd820774-b4b1-4eb6-8d5d-879171af6159
 status: experimental
 description: >
   Detects the fDenyTSConnections registry value being set to 0, which
