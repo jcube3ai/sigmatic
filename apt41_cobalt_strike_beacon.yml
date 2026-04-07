@@ -18,9 +18,9 @@ tags:
   - attack.command_and_control
   - attack.t1055
   - attack.t1572
-  - tlp:white
-  - actor:apt41
-  - sector:legal
+  - tlp.white
+  - actor.apt41
+  - sector.legal
 logsource:
   product: windows
   category: pipe_created
