@@ -1,5 +1,5 @@
 title: Silent Ransom - Rclone Renamed Binary
-id: e1f2a3b4-c5d6-7890-efab-901234567890
+id: 6093fdab-af24-4e5d-b6db-c9c74193e864
 status: stable
 description: Detects execution of rclone with a renamed binary, a technique
   used by Silent Ransom Group to exfiltrate data while evading detection
