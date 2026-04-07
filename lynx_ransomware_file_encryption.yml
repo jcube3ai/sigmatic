@@ -16,9 +16,9 @@ date: 2026-03-25
 tags:
   - attack.impact
   - attack.t1486
-  - tlp:white
-  - actor:lynx_ransomware
-  - sector:legal
+  - tlp.white
+  - actor.lynx_ransomware
+  - sector.legal
 logsource:
   product: windows
   category: file_event
