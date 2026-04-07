@@ -1,9 +1,6 @@
 sigma-cli
-pySigma
-pyparsing>=3.1.4,<3.2.0
 pySigma-backend-splunk
 pySigma-backend-microsoft365defender
-pySigma-backend-qradar
 pySigma-backend-cortexxdr
 pySigma-pipeline-windows
 pySigma-pipeline-sysmon
