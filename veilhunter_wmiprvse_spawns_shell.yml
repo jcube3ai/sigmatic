@@ -1,5 +1,5 @@
 title: VeilHunter - WMI Provider Host Spawning Command Shell
-id: a3b4c5d6-0205-4e6f-0a1b-7ad909f50205
+id: 6e0a3848-3ea7-4e08-9acf-4f119678b455
 status: experimental
 description: >
   Detects wmiprvse.exe (WMI provider host) spawning cmd.exe, PowerShell,
