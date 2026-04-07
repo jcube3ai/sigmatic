@@ -16,7 +16,6 @@ tags:
   - attack.impact
   - attack.t1486
   - attack.t1657
-  - tlp.white
   - actor.play_ransomware
   - sector.legal
 logsource:
