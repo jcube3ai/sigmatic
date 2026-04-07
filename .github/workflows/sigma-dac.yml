@@ -100,7 +100,7 @@ jobs:
           echo "Converting to Splunk SPL..."
           xargs sigma convert \
             -t splunk \
-            --without-pipeline \
+            -f default \
             --skip-unsupported \
             -o output/splunk/sigmatic_splunk.conf \
             < /tmp/rule_list.txt
@@ -112,7 +112,7 @@ jobs:
           echo "Converting to Microsoft Sentinel KQL..."
           xargs sigma convert \
             -t microsoft365defender \
-            --without-pipeline \
+            -f default \
             --skip-unsupported \
             -o output/sentinel/sigmatic_sentinel.kql \
             < /tmp/rule_list.txt
@@ -124,7 +124,7 @@ jobs:
           echo "Converting to Cortex XSIAM XQL..."
           xargs sigma convert \
             -t cortexxdr \
-            --without-pipeline \
+            -f default \
             --skip-unsupported \
             -o output/xsiam/sigmatic_xsiam.xql \
             < /tmp/rule_list.txt
@@ -136,7 +136,7 @@ jobs:
           echo "Converting to QRadar AQL..."
           xargs sigma convert \
             -t qradar \
-            --without-pipeline \
+            -f default \
             --skip-unsupported \
             -o output/qradar/sigmatic_qradar.aql \
             < /tmp/rule_list.txt
