@@ -14,11 +14,7 @@ references:
 author: VeilHunter - Legal Sector APT
 date: 2026-03-25
 tags:
-  - attack.defense_evasion
-  - attack.persistence
   - attack.t1574.002
-  - actor.apt41
-  - sector.legal
 logsource:
   product: windows
   category: image_load
