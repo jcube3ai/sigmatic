@@ -20,9 +20,9 @@ tags:
   - attack.t1566.001
   - attack.t1204.002
   - attack.t1553.005
-  - tlp:white
-  - actor:apt41
-  - sector:legal
+  - tlp.white
+  - actor.apt41
+  - sector.legal
 logsource:
   product: windows
   category: process_creation
