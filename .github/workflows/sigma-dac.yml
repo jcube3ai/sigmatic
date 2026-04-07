@@ -4,10 +4,8 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-  
   pull_request:
     branches: [main]
-   
 
 jobs:
   # ── JOB 1: VALIDATE ───────────────────────────────────────
@@ -38,16 +36,38 @@ jobs:
       - name: Lint YAML syntax
         run: |
           echo "Running yamllint on all Sigma rules..."
-          yamllint -c .yamllint.yml *.yml
+          find . -name "*.yml" \
+            -not -path "./.github/*" \
+            -not -name ".yamllint.yml" \
+            -not -name "requirements.txt" \
+            | sort \
+            | xargs yamllint -c .yamllint.yml
           echo "YAML lint passed."
 
       - name: Validate Sigma rule structure
         run: |
           echo "Validating Sigma rules with sigma-cli..."
-          sigma check *.yml
+          find . -name "*.yml" \
+            -not -path "./.github/*" \
+            -not -name ".yamllint.yml" \
+            | sort \
+            | xargs sigma check
           echo "All Sigma rules passed validation."
 
-# ── JOB 2: CONVERT ────────────────────────────────────────
+      - name: Count rules by directory
+        run: |
+          echo "=== Rule counts by category ==="
+          for dir in tactics/persistence tactics/credential_access \
+                     tactics/lateral_movement tactics/defense_evasion \
+                     tactics/execution tactics/c2_exfil tactics/impact \
+                     threat-actor sector delivery; do
+            count=$(find $dir -name "*.yml" 2>/dev/null | wc -l)
+            echo "$dir: $count rules"
+          done
+          echo ""
+          echo "Total: $(find . -name '*.yml' -not -path './.github/*' -not -name '.yamllint.yml' | wc -l) rules"
+
+  # ── JOB 2: CONVERT ────────────────────────────────────────
   convert:
     name: Convert to Platform Query Languages
     runs-on: ubuntu-latest
@@ -65,75 +85,107 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Build rule list
+        run: |
+          find . -name "*.yml" \
+            -not -path "./.github/*" \
+            -not -name ".yamllint.yml" \
+            | sort > /tmp/rule_list.txt
+          echo "Found $(wc -l < /tmp/rule_list.txt) rules to convert"
+          cat /tmp/rule_list.txt
+
       - name: Convert rules to Splunk SPL
         run: |
           mkdir -p output/splunk
           echo "Converting to Splunk SPL..."
-          sigma convert \
+          xargs sigma convert \
             -t splunk \
             --without-pipeline \
             --skip-unsupported \
-            *.yml \
-            -o output/splunk/sigmatic_splunk.conf
-          echo "Splunk conversion complete."
+            -o output/splunk/sigmatic_splunk.conf \
+            < /tmp/rule_list.txt
+          echo "Splunk: $(wc -l < output/splunk/sigmatic_splunk.conf) lines generated"
 
       - name: Convert rules to Microsoft Sentinel KQL
         run: |
           mkdir -p output/sentinel
           echo "Converting to Microsoft Sentinel KQL..."
-          sigma convert \
+          xargs sigma convert \
             -t microsoft365defender \
             --without-pipeline \
             --skip-unsupported \
-            *.yml \
-            -o output/sentinel/sigmatic_sentinel.kql
-          echo "Sentinel conversion complete."
+            -o output/sentinel/sigmatic_sentinel.kql \
+            < /tmp/rule_list.txt
+          echo "Sentinel: $(wc -l < output/sentinel/sigmatic_sentinel.kql) lines generated"
 
       - name: Convert rules to Cortex XDR / XSIAM XQL
         run: |
           mkdir -p output/xsiam
           echo "Converting to Cortex XSIAM XQL..."
-          sigma convert \
+          xargs sigma convert \
             -t cortexxdr \
             --without-pipeline \
             --skip-unsupported \
-            *.yml \
-            -o output/xsiam/sigmatic_xsiam.xql
-          echo "XSIAM conversion complete."
+            -o output/xsiam/sigmatic_xsiam.xql \
+            < /tmp/rule_list.txt
+          echo "XSIAM: $(wc -l < output/xsiam/sigmatic_xsiam.xql) lines generated"
 
       - name: Convert rules to QRadar AQL
         run: |
           mkdir -p output/qradar
           echo "Converting to QRadar AQL..."
-          sigma convert \
+          xargs sigma convert \
             -t qradar \
             --without-pipeline \
             --skip-unsupported \
-            *.yml \
-            -o output/qradar/sigmatic_qradar.aql
-          echo "QRadar conversion complete."
+            -o output/qradar/sigmatic_qradar.aql \
+            < /tmp/rule_list.txt
+          echo "QRadar: $(wc -l < output/qradar/sigmatic_qradar.aql) lines generated"
 
       - name: Generate conversion summary
         run: |
           echo "## Conversion Summary" > output/SUMMARY.md
           echo "" >> output/SUMMARY.md
-          echo "| Platform | Output File | Rules Converted |" >> output/SUMMARY.md
-          echo "|----------|-------------|-----------------|" >> output/SUMMARY.md
+          echo "| Platform | Output File | Lines |" >> output/SUMMARY.md
+          echo "|----------|-------------|-------|" >> output/SUMMARY.md
           for platform in splunk sentinel xsiam qradar; do
             file=$(ls output/$platform/ 2>/dev/null | head -1)
             if [ -f "output/$platform/$file" ]; then
-              echo "| $platform | $file | generated |" >> output/SUMMARY.md
+              lines=$(wc -l < "output/$platform/$file")
+              echo "| $platform | $file | $lines |" >> output/SUMMARY.md
+            else
+              echo "| $platform | no output | 0 |" >> output/SUMMARY.md
             fi
           done
+          echo "" >> output/SUMMARY.md
+          echo "Total rules: $(wc -l < /tmp/rule_list.txt)" >> output/SUMMARY.md
           cat output/SUMMARY.md
+
+      - name: Verify artifacts are not empty
+        run: |
+          echo "=== Output file sizes ==="
+          find output/ -type f | xargs ls -lah
+          for f in output/splunk/sigmatic_splunk.conf \
+                   output/sentinel/sigmatic_sentinel.kql \
+                   output/xsiam/sigmatic_xsiam.xql \
+                   output/qradar/sigmatic_qradar.aql; do
+            if [ ! -s "$f" ]; then
+              echo "ERROR: $f is empty!"
+              exit 1
+            else
+              echo "OK: $f has content"
+            fi
+          done
 
       - name: Upload converted rules as artifacts
         uses: actions/upload-artifact@v4
         with:
           name: sigmatic-converted-rules-${{ github.sha }}
           path: output/
+          if-no-files-found: error
           retention-days: 30
-  # ── JOB 3: PR COMMENT (pull requests only) ────────────────
+
+  # ── JOB 3: PR COMMENT ─────────────────────────────────────
   pr-summary:
     name: Post PR Summary
     runs-on: ubuntu-latest
