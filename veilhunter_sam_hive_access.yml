@@ -1,5 +1,5 @@
 title: VeilHunter - SAM Hive Access
-id: f6a7b8c9-d0e1-2345-fabc-456789012345
+id: 21e3e5aa-7471-44e7-836e-e94ce8cb66c7
 status: stable
 description: Detects suspicious access to the SAM registry hive, commonly used
   for credential dumping via reg save or esentutl.
