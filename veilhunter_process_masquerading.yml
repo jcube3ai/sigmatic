@@ -1,5 +1,5 @@
 title: VeilHunter - Windows System Process Running from Unexpected Path
-id: d2e3f4a5-0307-4b5c-9d0e-6d4898e80307
+id: ce89e6ed-bf4f-4416-a997-49d94bf04bbf
 status: experimental
 description: >
   Detects known Windows system process names (svchost, lsass, csrss, etc.)
