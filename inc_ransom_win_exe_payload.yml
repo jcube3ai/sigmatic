@@ -1,5 +1,5 @@
 title: INC Ransom - Malicious win.exe Payload Execution
-id: bb08cc09-dd01-4ee0-ff02-007700880bb
+id: 3523e41d-2530-4b0b-8266-8e96a1a92ca3
 status: experimental
 description: >
   Detects execution of a file named win.exe from user-writable or staging
