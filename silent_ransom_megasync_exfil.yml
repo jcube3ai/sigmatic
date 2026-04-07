@@ -15,10 +15,10 @@ date: 2026-03-25
 tags:
   - attack.exfiltration
   - attack.t1567.002
-  - tlp:white
-  - actor:silent_ransom_group
-  - actor:inc_ransom
-  - sector:legal
+  - tlp.white
+  - actor.silent_ransom_group
+  - actor.inc_ransom
+  - sector.legal
 logsource:
   product: windows
   category: process_creation
