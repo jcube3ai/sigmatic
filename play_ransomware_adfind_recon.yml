@@ -17,7 +17,6 @@ tags:
   - attack.t1018
   - attack.t1069.002
   - attack.t1087.002
-  - tlp.white
   - actor.play_ransomware
   - sector.legal
 logsource:
