@@ -1,39 +1,37 @@
-title: VeilHunter - Backup Service Stopped or Disabled
-id: a7b8c9d0-0506-4e0f-4a5b-c067ed7d0506
-status: experimental
-description: >
-  Detects VSS, wbengine, or SDRSVC (Windows Backup) services being
-  stopped or set to disabled. Adversaries disable backup services before
-  encrypting data to prevent recovery (T1490).
-references:
-  - https://attack.mitre.org/techniques/T1490/
-author: VeilHunter
-date: 2026-03-25
+title: VeilHunter - Backup Service Disabled
+id: d0e1f2a3-b4c5-6789-defa-890123456789
+status: stable
+description: Detects attempts to disable or stop backup-related services,
+  a common pre-ransomware technique to prevent recovery.
+author: jcube3ai
+date: 2026-04-07
 tags:
   - attack.impact
   - attack.t1490
 logsource:
-  product: windows
   category: process_creation
+  product: windows
 detection:
   selection_sc:
     Image|endswith: '\sc.exe'
     CommandLine|contains:
       - 'stop'
       - 'delete'
-      - 'config'
-    CommandLine|contains:
-      - 'vss'
-      - 'wbengine'
-      - 'SDRSVC'
+      - 'disabled'
+      - 'VSS'
       - 'swprv'
+      - 'SDRSVC'
+      - 'wbengine'
+      - 'VeeamBackupSvc'
+      - 'BackupExecAgentAccelerator'
   selection_net:
     Image|endswith: '\net.exe'
-    CommandLine|contains: 'stop'
     CommandLine|contains:
-      - 'vss'
+      - 'stop'
+      - 'VSS'
       - 'wbengine'
+      - 'SDRSVC'
   condition: selection_sc or selection_net
 falsepositives:
-  - Authorised service management during maintenance
+  - Legitimate maintenance scripts disabling backup services
 level: high
