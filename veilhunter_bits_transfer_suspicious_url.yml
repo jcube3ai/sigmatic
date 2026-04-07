@@ -1,5 +1,5 @@
 title: VeilHunter - BITS Transfer to Suspicious External URL
-id: a5b6c7d8-0401-4e8f-2a3b-0a7b21b10401
+id: 7221d1f4-a975-4e70-b155-70fff5a73fb5
 status: experimental
 description: >
   Detects a BITS (Background Intelligent Transfer Service) job transferring
