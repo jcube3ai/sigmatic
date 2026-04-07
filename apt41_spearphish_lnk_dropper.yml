@@ -1,5 +1,5 @@
 title: APT41 - Spear Phishing LNK or ISO Dropper Execution
-id: c4e2a1f8-b3d5-4e7f-9a0b-1c2d3e4f5a6b
+id: 89d8c1a1-a8b1-46d5-bd20-00b7ce5877fe
 status: experimental
 description: >
   Detects execution of payloads via LNK shortcut or ISO/IMG mounted files,
