@@ -1,5 +1,5 @@
 title: VeilHunter - WMI Permanent Event Subscription Created
-id: a7b8c9d0-0007-4e0f-4a5b-6c7d8e9f0a1b
+id: bbf998bb-a20b-4777-8936-4a46903d9e53
 status: experimental
 description: >
   Detects the creation of a WMI permanent event subscription (EventFilter,
