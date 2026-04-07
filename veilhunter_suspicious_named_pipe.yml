@@ -1,5 +1,5 @@
 title: VeilHunter - Named Pipe Matching C2 Framework Pattern
-id: c7d8e9f0-0403-4a0b-4c5d-2c9d43d30403
+id: dcc65c98-e2db-4674-9f8e-532b30bb0663
 status: experimental
 description: >
   Detects creation or access of named pipes that match patterns used by
