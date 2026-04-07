@@ -1,5 +1,5 @@
 title: VeilHunter - WMI CommandLineEventConsumer Registered
-id: b8c9d0e1-0008-4f1a-5b6c-7d8e9f0a1b2c
+id: 68cf1bde-ba10-4f9b-a80e-c2731328ac13
 status: experimental
 description: >
   Detects registration of a WMI CommandLineEventConsumer, which executes
