@@ -1,5 +1,5 @@
 title: VeilHunter - PowerShell Download Cradle
-id: a7b8c9d0-e1f2-3456-abcd-567890123456
+id: cd607c45-d79d-4f52-b1af-3815821d47e6
 status: stable
 description: Detects PowerShell download cradle patterns commonly used to pull
   and execute remote payloads in memory.
