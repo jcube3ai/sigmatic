@@ -1,5 +1,5 @@
 title: VeilHunter - Boot Recovery Disabled via bcdedit
-id: c3d4e5f6-0502-4a6b-0c1d-8c23a9390502
+id: bbaa6c1a-e7f8-4ee9-981d-9afdeaac192f
 status: experimental
 description: >
   Detects bcdedit being used to disable Windows boot recovery options.
