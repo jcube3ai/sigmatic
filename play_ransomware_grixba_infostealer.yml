@@ -14,11 +14,8 @@ references:
 author: VeilHunter - Legal Sector APT
 date: 2026-03-25
 tags:
-  - attack.discovery
   - attack.t1016
   - attack.t1518.001
-  - actor.play_ransomware
-  - sector.legal
 logsource:
   product: windows
   category: process_creation
