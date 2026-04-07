@@ -1,5 +1,5 @@
 title: VeilHunter - Suspicious DPAPI Master Key Access
-id: f6a7b8c9-0106-4d9e-3f4a-0f6232e80106
+id: 549098ad-83e0-4cde-ae33-154d90e3e1c7
 status: experimental
 description: >
   Detects access to DPAPI master key files in the user Protect directory
