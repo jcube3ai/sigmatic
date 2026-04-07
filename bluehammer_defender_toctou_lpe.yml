@@ -1,5 +1,5 @@
 title: BlueHammer - Windows Defender TOCTOU Local Privilege Escalation
-id: e5f6a7b8-c9d0-1234-efab-345678901234
+id: 3a5dbd2d-4d17-4042-b759-0639515d1087
 status: experimental
 description: Detects indicators of a TOCTOU race condition exploit targeting
   Windows Defender scan operations to achieve local privilege escalation.
