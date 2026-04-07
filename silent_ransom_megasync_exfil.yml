@@ -1,5 +1,5 @@
 title: Silent Ransom Group / INC Ransom - MegaSync Data Exfiltration
-id: ee05ff06-0007-4112-2233-004400550ee
+id: 489390ee-60ce-4f6e-bdf8-29d290cd3397
 status: experimental
 description: >
   Detects MegaSync or MEGA CMD being used to upload data to the MEGA
