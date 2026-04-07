@@ -1,5 +1,5 @@
 title: Vidar Infostealer - Image File Executed as Batch Script via CMD Stdin
-id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+id: 213a321c-eb13-4f6c-8951-02c0586ee73a
 status: stable
 description: Detects cmd.exe using delayed variable expansion to execute an image
   file as a batch script via stdin redirection, a technique used by Vidar infostealer
