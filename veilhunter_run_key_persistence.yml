@@ -1,5 +1,5 @@
 title: VeilHunter - Suspicious Registry Run Key Written
-id: a1b2c3d4-0001-4e5f-8a9b-0c1d2e3f4a5b
+id: 64da2304-5179-499f-9fe6-ad708b80a1d6
 status: experimental
 description: >
   Detects a registry value being written to a Run or RunOnce autostart key
