@@ -16,10 +16,10 @@ tags:
   - attack.initial_access
   - attack.t1133
   - attack.t1190
-  - tlp:white
-  - actor:inc_ransom
-  - cve:CVE-2023-4966
-  - sector:legal
+  - tlp.white
+  - actor.inc_ransom
+  - cve.CVE-2023-4966
+  - sector.legal
 logsource:
   product: windows
   category: process_creation
