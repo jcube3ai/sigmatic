@@ -1,5 +1,5 @@
 title: VeilHunter - Windows Backup Catalog Deleted
-id: d4e5f6a7-0503-4b7c-1d2e-9d34ba4a0503
+id: 2655d459-5390-4e26-8bf6-53455d71909a
 status: experimental
 description: >
   Detects wbadmin being used to delete the Windows backup catalog.
