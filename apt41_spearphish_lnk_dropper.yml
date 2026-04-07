@@ -15,13 +15,9 @@ references:
 author: VeilHunter - Legal Sector APT
 date: 2026-03-25
 tags:
-  - attack.initial_access
-  - attack.execution
   - attack.t1566.001
   - attack.t1204.002
   - attack.t1553.005
-  - actor.apt41
-  - sector.legal
 logsource:
   product: windows
   category: process_creation
