@@ -17,7 +17,6 @@ tags:
   - attack.initial_access
   - attack.t1199
   - attack.t1021.001
-  - tlp:white
   - sector:legal
 logsource:
   product: windows
