@@ -1,5 +1,5 @@
 title: VeilHunter - Windows Security Event Log Cleared
-id: b0c1d2e3-0305-4f3a-7b8c-4b2676c60305
+id: ec1754b3-2e7b-493c-9708-5bf7a17de9d9
 status: experimental
 description: >
   Detects the clearing of the Windows Security event log (EventID 1102).
