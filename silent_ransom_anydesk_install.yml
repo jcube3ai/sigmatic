@@ -18,9 +18,9 @@ tags:
   - attack.command_and_control
   - attack.t1219
   - attack.t1566.004
-  - tlp:white
-  - actor:silent_ransom_group
-  - sector:legal
+  - tlp.white
+  - actor.silent_ransom_group
+  - sector.legal
 logsource:
   product: windows
   category: process_creation
