@@ -1,5 +1,5 @@
 title: Vidar Infostealer - Wextract IXP Temp Directory Child Process Execution
-id: c3d4e5f6-a7b8-9012-cdef-123456789012
+id: 9777df1d-bd9f-4ae8-94f1-c06090b48fe2
 status: stable
 description: Detects process execution originating from an IXP###.TMP directory
   under %TEMP%, indicating a self-extracting cabinet dropped by wextract.exe. Combined
