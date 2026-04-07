@@ -1,5 +1,5 @@
 title: VeilHunter - MSHTA Executing Remote HTA File
-id: b8c9d0e1-0601-4f1a-5b6c-d178fe8e0601
+id: caa7df3a-91a6-4448-8582-22815c37f595
 status: experimental
 description: >
   Detects mshta.exe executing an HTA file from a remote URL. MSHTA is
