@@ -1,5 +1,5 @@
 title: INC Ransom - New Local Admin Account Created Post-Compromise
-id: cc09dd01-ee02-4ff0-0033-008800990cc
+id: f91f4ccd-853c-4768-8ea6-21be7fcebdcd
 status: experimental
 description: >
   Detects the creation of a new local administrator account, a privilege
