@@ -1,5 +1,5 @@
 title: APT41 - Cobalt Strike Beacon Named Pipe and Process Injection
-id: aa01bb02-cc03-4dd0-ee04-00cc00dd0aa
+id: 0ff8a2ae-5bb6-4a64-8395-24e24b959511
 status: experimental
 description: >
   Detects Cobalt Strike Beacon activity consistent with APT41 post-exploitation
