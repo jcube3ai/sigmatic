@@ -1,5 +1,5 @@
 title: VeilHunter - PowerShell Encoded Command Execution
-id: a3b4c5d6-0606-4e6f-0a1b-26cde3d30606
+id: 51f6cda1-9a15-47d4-9429-56c951c94b4c
 status: experimental
 description: >
   Detects PowerShell being invoked with an encoded command (-EncodedCommand
