@@ -1,5 +1,5 @@
 title: Silent Ransom Group - Suspicious RMM Tool Installed After Hours
-id: aa01bb02-cc03-4dd0-ee04-ff05001100aa
+id: 55d1e0e5-8873-4ea9-b405-37c26a32845f
 status: experimental
 description: >
   Detects installation or execution of remote monitoring and management tools
