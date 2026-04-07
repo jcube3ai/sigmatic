@@ -1,5 +1,5 @@
 title: VeilHunter - Regsvr32 COM Scriptlet Execution
-id: e1f2a3b4-0604-4c4d-8e9f-04abc1b10604
+id: 9ccce9d4-4b4e-4fc9-8be5-e0a831640060
 status: experimental
 description: >
   Detects regsvr32.exe executing a remote scriptlet or a DLL/SCT from a
