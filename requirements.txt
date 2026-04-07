@@ -1,9 +1,9 @@
-sigma-cli
-pySigma-backend-splunk
-pySigma-backend-microsoft365defender
-pySigma-backend-qradar
-pySigma-backend-cortexxdr
-pySigma-pipeline-windows
-pySigma-pipeline-sysmon
+sigma-cli==0.7.11
+pySigma==0.10.10
+pySigma-backend-splunk==0.3.7
+pySigma-backend-microsoft365defender==0.3.2
+pySigma-backend-qradar==0.2.1
+pySigma-backend-cortexxdr==0.1.5
+pySigma-pipeline-windows==1.2.0
+pySigma-pipeline-sysmon==1.0.4
 yamllint
-pyparsing<3.0.0
