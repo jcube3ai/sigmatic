@@ -1,5 +1,5 @@
 title: VeilHunter - Backup Service Disabled
-id: d0e1f2a3-b4c5-6789-defa-890123456789
+id: 071c3ec7-cad3-451c-8db4-6ab5a534f228
 status: stable
 description: Detects attempts to disable or stop backup-related services,
   a common pre-ransomware technique to prevent recovery.
