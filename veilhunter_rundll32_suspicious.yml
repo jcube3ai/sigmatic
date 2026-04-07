@@ -1,5 +1,5 @@
 title: VeilHunter - Rundll32 Suspicious Execution
-id: d0e1f2a3-0603-4b3c-7d8e-f39ab0a00603
+id: 13d27199-dcdf-409f-8bbf-589f1d82d6bb
 status: experimental
 description: >
   Detects rundll32.exe executing with arguments that indicate abuse,
