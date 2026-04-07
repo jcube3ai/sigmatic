@@ -1,5 +1,5 @@
 title: VeilHunter - Office Application Spawning LOLBin (Macro Execution)
-id: b4c5d6e7-0607-4f7a-1b2c-37def4e40607
+id: a0ab0cd1-cd3e-4432-bbc1-3201fd54f469
 status: experimental
 description: >
   Detects Microsoft Office applications (Word, Excel, Outlook, PowerPoint)
