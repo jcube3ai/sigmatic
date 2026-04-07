@@ -7,7 +7,6 @@ description: Detects domain administrator reconnaissance commands observed in
 author: jcube3ai
 date: 2026-04-07
 tags:
-  - attack.discovery
   - attack.t1069.002
   - attack.t1087.002
 logsource:
