@@ -39,7 +39,6 @@ jobs:
           find . -name "*.yml" \
             -not -path "./.github/*" \
             -not -name ".yamllint.yml" \
-            -not -name "requirements.txt" \
             | sort \
             | xargs yamllint -c .yamllint.yml
           echo "YAML lint passed."
@@ -65,7 +64,10 @@ jobs:
             echo "$dir: $count rules"
           done
           echo ""
-          echo "Total: $(find . -name '*.yml' -not -path './.github/*' -not -name '.yamllint.yml' | wc -l) rules"
+          total=$(find . -name "*.yml" \
+            -not -path "./.github/*" \
+            -not -name ".yamllint.yml" | wc -l)
+          echo "Total: $total rules"
 
   # ── JOB 2: CONVERT ────────────────────────────────────────
   convert:
@@ -100,7 +102,8 @@ jobs:
           echo "Converting to Splunk SPL..."
           xargs sigma convert \
             -t splunk \
-            -f default \
+            -p splunk_windows \
+            -p splunk_sysmon_message \
             --skip-unsupported \
             -o output/splunk/sigmatic_splunk.conf \
             < /tmp/rule_list.txt
@@ -112,7 +115,7 @@ jobs:
           echo "Converting to Microsoft Sentinel KQL..."
           xargs sigma convert \
             -t microsoft365defender \
-            -f default \
+            -p microsoft_365_defender \
             --skip-unsupported \
             -o output/sentinel/sigmatic_sentinel.kql \
             < /tmp/rule_list.txt
@@ -124,7 +127,7 @@ jobs:
           echo "Converting to Cortex XSIAM XQL..."
           xargs sigma convert \
             -t cortexxdr \
-            -f default \
+            --without-pipeline \
             --skip-unsupported \
             -o output/xsiam/sigmatic_xsiam.xql \
             < /tmp/rule_list.txt
@@ -136,7 +139,7 @@ jobs:
           echo "Converting to QRadar AQL..."
           xargs sigma convert \
             -t qradar \
-            -f default \
+            --without-pipeline \
             --skip-unsupported \
             -o output/qradar/sigmatic_qradar.aql \
             < /tmp/rule_list.txt
@@ -212,7 +215,6 @@ jobs:
             } catch (e) {
               summary = 'Conversion completed — see artifacts for output files.';
             }
-
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
