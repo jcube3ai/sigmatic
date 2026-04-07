@@ -14,12 +14,8 @@ references:
 author: VeilHunter - Legal Sector APT
 date: 2026-03-25
 tags:
-  - attack.execution
-  - attack.command_and_control
   - attack.t1055
   - attack.t1572
-  - actor.apt41
-  - sector.legal
 logsource:
   product: windows
   category: pipe_created
