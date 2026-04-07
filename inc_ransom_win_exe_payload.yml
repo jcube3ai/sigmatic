@@ -15,7 +15,6 @@ date: 2026-03-25
 tags:
   - attack.execution
   - attack.t1204.002
-  - tlp.white
   - actor.inc_ransom
   - sector.legal
 logsource:
