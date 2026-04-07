@@ -16,9 +16,9 @@ tags:
   - attack.exfiltration
   - attack.t1048
   - attack.t1041
-  - tlp:white
-  - actor:silent_ransom_group
-  - sector:legal
+  - tlp.white
+  - actor.silent_ransom_group
+  - sector.legal
 logsource:
   product: windows
   category: network_connection
