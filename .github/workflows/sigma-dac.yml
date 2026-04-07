@@ -3,9 +3,9 @@ name: Sigma Detection-as-Code Pipeline
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   # ── JOB 1: VALIDATE ───────────────────────────────────────
@@ -33,16 +33,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Debug sigma install
-        run: |
-          echo "=== sigma version ==="
-          sigma version || true
-          echo "=== installed sigma packages ==="
-          pip list | grep -i -E "sigma|pysigma"
-          echo "=== available pipelines ==="
-          sigma list pipelines || true
+          pip install -r requirements.txt --use-deprecated=legacy-resolver
 
       - name: Lint YAML syntax
         run: |
@@ -52,32 +43,43 @@ jobs:
             -not -name ".yamllint.yml" \
             | sort \
             | xargs yamllint -c .yamllint.yml
-          echo "✅ YAML lint passed."
+          echo "YAML lint passed."
 
       - name: Validate Sigma rule structure
         run: |
           echo "Validating Sigma rules with sigma-cli..."
-          mapfile -t RULES < <(find . -name "*.yml" \
+          find . -name "*.yml" \
             -not -path "./.github/*" \
-            -not -name ".yamllint.yml" | sort)
-
-          for rule in "${RULES[@]}"; do
-            echo "→ Checking $(basename "$rule")"
-            if ! sigma check "$rule"; then
-              echo "❌ VALIDATION FAILED on: $rule"
-              echo "Full error output:"
-              sigma check "$rule" || true
-              exit 1
-            fi
-          done
-          echo "✅ All Sigma rules passed validation."
+            -not -name ".yamllint.yml" \
+            | sort | while read rule; do
+              echo "→ Checking $rule"
+              result=$(sigma check "$rule" 2>&1)
+              exit_code=$?
+              echo "$result"
+              if [ $exit_code -ne 0 ]; then
+                echo "❌ VALIDATION FAILED on: $rule"
+                echo "Full error output:"
+                echo "$result"
+                exit 1
+              fi
+            done
+          echo "All Sigma rules passed validation."
 
       - name: Count rules by directory
         run: |
-          echo "=== Rule counts ==="
-          total=$(find . -name "*.yml" -not -path "./.github/*" -not -name ".yamllint.yml" | wc -l)
-          echo "Total Sigma rules: $total"
-          echo "Rules are located in root + sigma/ subfolders"
+          echo "=== Rule counts by category ==="
+          for dir in tactics/persistence tactics/credential_access \
+                     tactics/lateral_movement tactics/defense_evasion \
+                     tactics/execution tactics/c2_exfil tactics/impact \
+                     threat-actor sector delivery; do
+            count=$(find $dir -name "*.yml" 2>/dev/null | wc -l)
+            echo "$dir: $count rules"
+          done
+          echo ""
+          total=$(find . -name "*.yml" \
+            -not -path "./.github/*" \
+            -not -name ".yamllint.yml" | wc -l)
+          echo "Total: $total rules"
 
   # ── JOB 2: CONVERT ────────────────────────────────────────
   convert:
@@ -97,7 +99,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements.txt --use-deprecated=legacy-resolver
 
       - name: Build rule list
         run: |
@@ -106,13 +108,15 @@ jobs:
             -not -name ".yamllint.yml" \
             | sort > /tmp/rule_list.txt
           echo "Found $(wc -l < /tmp/rule_list.txt) rules to convert"
+          cat /tmp/rule_list.txt
 
-      - name: Debug available pipelines
+      - name: Debug available backends
         run: |
-          echo "=== Installed sigma packages ==="
-          pip list | grep -i -E "sigma|pysigma"
-          echo "=== Available pipelines ==="
-          sigma list pipelines || true
+          echo "=== Installed backends ==="
+          sigma plugin list --plugin-type backend || true
+          echo ""
+          echo "=== Installed pipelines ==="
+          sigma plugin list --plugin-type pipeline || true
 
       - name: Convert rules to Splunk SPL
         run: |
@@ -138,7 +142,7 @@ jobs:
             < /tmp/rule_list.txt
           echo "Sentinel: $(wc -l < output/sentinel/sigmatic_sentinel.kql) lines generated"
 
-      - name: Convert rules to Cortex XSIAM XQL
+      - name: Convert rules to Cortex XDR / XSIAM XQL
         run: |
           mkdir -p output/xsiam
           echo "Converting to Cortex XSIAM XQL..."
@@ -150,25 +154,13 @@ jobs:
             < /tmp/rule_list.txt
           echo "XSIAM: $(wc -l < output/xsiam/sigmatic_xsiam.xql) lines generated"
 
-      - name: Convert rules to QRadar AQL
-        run: |
-          mkdir -p output/qradar
-          echo "Converting to QRadar AQL..."
-          xargs sigma convert \
-            -t qradar \
-            --without-pipeline \
-            --skip-unsupported \
-            -o output/qradar/sigmatic_qradar.aql \
-            < /tmp/rule_list.txt
-          echo "QRadar: $(wc -l < output/qradar/sigmatic_qradar.aql) lines generated"
-
       - name: Generate conversion summary
         run: |
           echo "## Conversion Summary" > output/SUMMARY.md
           echo "" >> output/SUMMARY.md
           echo "| Platform | Output File | Lines |" >> output/SUMMARY.md
           echo "|----------|-------------|-------|" >> output/SUMMARY.md
-          for platform in splunk sentinel xsiam qradar; do
+          for platform in splunk sentinel xsiam; do
             file=$(ls output/$platform/ 2>/dev/null | head -1)
             if [ -f "output/$platform/$file" ]; then
               lines=$(wc -l < "output/$platform/$file")
@@ -178,13 +170,22 @@ jobs:
             fi
           done
           echo "" >> output/SUMMARY.md
-          echo "Total rules converted: $(wc -l < /tmp/rule_list.txt)" >> output/SUMMARY.md
+          echo "Total rules: $(wc -l < /tmp/rule_list.txt)" >> output/SUMMARY.md
           cat output/SUMMARY.md
 
-      - name: Verify artifacts
+      - name: Verify artifacts are not empty
         run: |
           echo "=== Output file sizes ==="
-          find output/ -type f -exec ls -lah {} \;
+          find output/ -type f | xargs ls -lah
+          for f in output/splunk/sigmatic_splunk.conf \
+                   output/sentinel/sigmatic_sentinel.kql \
+                   output/xsiam/sigmatic_xsiam.xql; do
+            if [ ! -s "$f" ]; then
+              echo "WARNING: $f is empty"
+            else
+              echo "OK: $f has content"
+            fi
+          done
 
       - name: Upload converted rules as artifacts
         uses: actions/upload-artifact@v4
@@ -215,14 +216,15 @@ jobs:
         with:
           script: |
             const fs = require('fs');
-            let summary = 'Conversion completed — see artifacts for output files.';
+            let summary = '';
             try {
               summary = fs.readFileSync('output/SUMMARY.md', 'utf8');
-            } catch (e) {}
-            
+            } catch (e) {
+              summary = 'Conversion completed — see artifacts for output files.';
+            }
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `## ✅ Sigmatic DaC Pipeline Results\n\n**Validation passed**\n**Rules successfully converted** to SPL, KQL, XQL, and AQL\n\n${summary}\n\n📦 [Download converted rules from Artifacts](${context.payload.pull_request.html_url}/checks)`
+              body: `## Sigmatic DaC Pipeline Results\n\n✅ Validation passed\n✅ Rules converted to SPL, KQL, XQL\n\n${summary}\n\n📦 Download converted rules from the [Actions artifacts](${context.payload.pull_request.html_url}/checks).`
             });
