@@ -17,9 +17,9 @@ tags:
   - attack.privilege_escalation
   - attack.t1136.001
   - attack.t1098
-  - tlp:white
-  - actor:inc_ransom
-  - sector:legal
+  - tlp.white
+  - actor.inc_ransom
+  - sector.legal
 logsource:
   product: windows
   service: security
