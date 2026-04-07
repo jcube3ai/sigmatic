@@ -1,5 +1,5 @@
 title: VeilHunter - Windows Service with Suspicious ImagePath
-id: f6a7b8c9-0006-4d9e-3f4a-5b6c7d8e9f0a
+id: 11166771-0a63-4686-bf90-39a166c2bc4d
 status: experimental
 description: >
   Detects a Windows service whose ImagePath references a user-writable
