@@ -1,5 +1,5 @@
 title: VeilHunter - New Windows Service Installed
-id: e5f6a7b8-0005-4c8d-2e3f-4a5b6c7d8e9f
+id: 5d518569-efd3-4edf-afe2-76e8544cf1ce
 status: experimental
 description: >
   Detects the installation of a new Windows service. While common during
