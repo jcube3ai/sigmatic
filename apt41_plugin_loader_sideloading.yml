@@ -1,5 +1,5 @@
 title: APT41 - DLL Side-Loading via Legitimate Signed Binary
-id: ff09aa01-bb02-4cc0-dd03-00bb00cc0ff
+id: faf32ffc-e95b-491b-a65e-b8c244c038cc
 status: experimental
 description: >
   Detects DLL side-loading patterns associated with APT41 intrusions.
