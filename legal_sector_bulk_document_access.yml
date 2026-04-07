@@ -6,7 +6,6 @@ description: Detects bulk access to documents in legal document management
 author: jcube3ai
 date: 2026-04-07
 tags:
-  - attack.collection
   - attack.t1213
 logsource:
   category: file_event
