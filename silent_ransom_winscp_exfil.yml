@@ -1,5 +1,5 @@
 title: Silent Ransom Group - WinSCP Data Exfiltration to External IP
-id: bb02cc03-dd04-4ee0-ff05-001100220bb
+id: b7d9916d-278d-4ac7-adcd-04a7737f62ed
 status: experimental
 description: >
   Detects WinSCP being used to transfer data to an external IP address.
