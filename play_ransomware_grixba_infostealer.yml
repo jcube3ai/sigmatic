@@ -17,9 +17,9 @@ tags:
   - attack.discovery
   - attack.t1016
   - attack.t1518.001
-  - tlp:white
-  - actor:play_ransomware
-  - sector:legal
+  - tlp.white
+  - actor.play_ransomware
+  - sector.legal
 logsource:
   product: windows
   category: process_creation
