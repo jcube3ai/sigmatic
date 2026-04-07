@@ -96,14 +96,30 @@ jobs:
           echo "Found $(wc -l < /tmp/rule_list.txt) rules to convert"
           cat /tmp/rule_list.txt
 
+      - name: Debug available pipelines
+        run: |
+          echo "=== Installed sigma plugins ==="
+          sigma plugin list || true
+          echo ""
+          echo "=== Available Splunk pipelines ==="
+          sigma list pipelines splunk || true
+          echo ""
+          echo "=== Available Sentinel pipelines ==="
+          sigma list pipelines microsoft365defender || true
+
       - name: Convert rules to Splunk SPL
         run: |
           mkdir -p output/splunk
           echo "Converting to Splunk SPL..."
           xargs sigma convert \
             -t splunk \
-            -p splunk_windows \
-            -p splunk_sysmon_message \
+            -p windows-sysmon \
+            --skip-unsupported \
+            -o output/splunk/sigmatic_splunk.conf \
+            < /tmp/rule_list.txt || \
+          xargs sigma convert \
+            -t splunk \
+            --without-pipeline \
             --skip-unsupported \
             -o output/splunk/sigmatic_splunk.conf \
             < /tmp/rule_list.txt
@@ -115,7 +131,7 @@ jobs:
           echo "Converting to Microsoft Sentinel KQL..."
           xargs sigma convert \
             -t microsoft365defender \
-            -p microsoft_365_defender \
+            --without-pipeline \
             --skip-unsupported \
             -o output/sentinel/sigmatic_sentinel.kql \
             < /tmp/rule_list.txt
