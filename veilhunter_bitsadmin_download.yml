@@ -1,5 +1,5 @@
 title: VeilHunter - BITSAdmin Download
-id: c9d0e1f2-a3b4-5678-cdef-789012345678
+id: 6ba9829b-094f-4fec-9caf-f8a539b0fa9a
 status: stable
 description: Detects use of bitsadmin to download files from remote locations,
   a common living-off-the-land technique used for payload staging.
