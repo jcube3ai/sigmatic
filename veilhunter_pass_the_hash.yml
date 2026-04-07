@@ -1,5 +1,5 @@
 title: VeilHunter - Pass-the-Hash - NTLM Network Logon
-id: f2a3b4c5-0204-4d5e-9f0a-6fc898e40204
+id: 747c3ca1-a016-4e90-9320-f68e61e9207a
 status: experimental
 description: >
   Detects a Type-3 (network) NTLM logon from a remote IP address for
