@@ -1,5 +1,5 @@
 title: Legal Sector - Bulk Document Access from Single Process
-id: dd04ee05-ff06-4001-1122-00ff00001dd
+id: 88a37752-fc62-473c-a060-27ccc2ff4234
 status: experimental
 description: >
   Detects a non-document-application process opening an unusually high volume
