@@ -17,7 +17,6 @@ tags:
   - attack.discovery
   - attack.t1016
   - attack.t1518.001
-  - tlp.white
   - actor.play_ransomware
   - sector.legal
 logsource:
