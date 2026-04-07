@@ -1,5 +1,5 @@
 title: INC Ransom - Citrix NetScaler Session Token Abuse (CitrixBleed Pattern)
-id: dd01ee02-ff03-4aa0-bb04-009900aa0dd
+id: a6495df5-1c3c-450e-bc11-ba862540d3dd
 status: experimental
 description: >
   Detects indicators of Citrix NetScaler exploitation consistent with
