@@ -1,32 +1,31 @@
-title: VeilHunter - SAM / SECURITY / SYSTEM Hive Saved to Disk
-id: c3d4e5f6-0103-4a6b-0c1d-dc3f04b50103
-status: experimental
-description: >
-  Detects an attempt to save the SAM, SECURITY, or SYSTEM registry hives
-  to disk using reg.exe. These hives contain password hashes and LSA secrets.
-  Mapped to T1003.002.
-references:
-  - https://attack.mitre.org/techniques/T1003/002/
-author: VeilHunter
-date: 2026-03-25
+title: VeilHunter - SAM Hive Access
+id: f6a7b8c9-d0e1-2345-fabc-456789012345
+status: stable
+description: Detects suspicious access to the SAM registry hive, commonly used
+  for credential dumping via reg save or esentutl.
+author: jcube3ai
+date: 2026-04-07
 tags:
   - attack.credential_access
   - attack.t1003.002
 logsource:
-  product: windows
   category: process_creation
+  product: windows
 detection:
   selection:
-    Image|endswith: '\reg.exe'
-    CommandLine|contains: 'save'
+    Image|endswith:
+      - '\reg.exe'
+      - '\esentutl.exe'
     CommandLine|contains:
-      - 'hklm\sam'
-      - 'hklm\security'
-      - 'hklm\system'
-      - 'HKLM\SAM'
-      - 'HKLM\SECURITY'
-      - 'HKLM\SYSTEM'
-  condition: selection
+      - 'sam'
+      - 'SYSTEM'
+      - 'security'
+      - 'hklm'
+  filter_legit:
+    CommandLine|contains:
+      - 'backup'
+      - 'restore'
+  condition: selection and not filter_legit
 falsepositives:
-  - Backup scripts — rare, and should be documented/scheduled
+  - Legitimate backup software accessing registry hives
 level: high
