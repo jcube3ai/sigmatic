@@ -1,5 +1,5 @@
 title: VeilHunter - AMSI Provider Registered or Tampered
-id: d6e7f8a9-0301-4b9c-3d4e-0de232280301
+id: a7792ce3-6b04-4d34-b853-625c33f56257
 status: experimental
 description: >
   Detects modification of AMSI provider registry keys. Adversaries modify
