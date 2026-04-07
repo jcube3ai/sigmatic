@@ -1,5 +1,5 @@
 title: Silent Ransom Group - Callback Phishing RMM Download Chain
-id: dd04ee05-ff06-4001-1122-003300440dd
+id: 1666d296-c08a-4d96-b514-82dc8255d3db
 status: experimental
 description: >
   Detects the process chain characteristic of Silent Ransom Group callback
