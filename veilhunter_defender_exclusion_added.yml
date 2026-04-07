@@ -1,5 +1,5 @@
 title: VeilHunter - Windows Defender Exclusion Path Added
-id: a9b0c1d2-0304-4e2f-6a7b-3a1565b50304
+id: 5776c6fb-d587-4575-9856-2cabecae06bb
 status: experimental
 description: >
   Detects a path being added to Windows Defender exclusions. Adversaries
