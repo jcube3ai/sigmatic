@@ -1,5 +1,5 @@
 title: VeilHunter - Admin Share Accessed from Remote Host
-id: d0e1f2a3-0202-4b3c-7d8e-4da676c20202
+id: f4bb5c1d-8e37-4308-8599-422cd23c7e7b
 status: experimental
 description: >
   Detects access to Windows admin shares (C$, ADMIN$, IPC$) from a
