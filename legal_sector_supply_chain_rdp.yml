@@ -1,5 +1,5 @@
 title: Legal Sector - Unexpected RDP from Legal Tech Vendor IP Range
-id: ee05ff06-aa07-4bb0-cc08-001100220ee
+id: d7bf4c46-87ec-4845-bd5f-5f30d8b5056a
 status: experimental
 description: >
   Detects RDP logon events from IP addresses associated with legal technology
