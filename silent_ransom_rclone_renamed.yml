@@ -1,54 +1,31 @@
-title: Silent Ransom Group - Rclone Executing with Exfiltration Arguments
-id: cc03dd04-ee05-4ff0-0011-002200330cc
-status: experimental
-description: >
-  Detects Rclone being executed with arguments indicating data exfiltration,
-  including to cloud providers. Silent Ransom Group uses hidden or renamed
-  versions of Rclone to exfiltrate law firm data. The FBI advisory notes that
-  the group renames Rclone to disguise it as a legitimate process. Covers both
-  rclone.exe and processes with rclone-style arguments running from any path.
-references:
-  - https://www.ic3.gov/CSA/2025/250523.pdf
-  - https://attack.mitre.org/techniques/T1048/
-author: VeilHunter - Legal Sector APT
-date: 2026-03-25
+title: Silent Ransom - Rclone Renamed Binary
+id: e1f2a3b4-c5d6-7890-efab-901234567890
+status: stable
+description: Detects execution of rclone with a renamed binary, a technique
+  used by Silent Ransom Group to exfiltrate data while evading detection
+  by process name.
+author: jcube3ai
+date: 2026-04-07
 tags:
   - attack.exfiltration
   - attack.t1048
-  - attack.t1567
-  - tlp:white
-  - actor:silent_ransom_group
-  - sector:legal
+  - attack.t1036
 logsource:
-  product: windows
   category: process_creation
+  product: windows
 detection:
-  selection_binary:
+  selection:
+    CommandLine|contains:
+      - 'mega'
+      - 'dropbox'
+      - 'sftp'
+      - 'ftp'
+      - '--config'
+      - '--transfers'
+      - 'copy'
+  filter_legit:
     Image|endswith: '\rclone.exe'
-  selection_args:
-    CommandLine|contains:
-      - ' copy '
-      - ' sync '
-      - ' move '
-    CommandLine|contains:
-      - 'mega:'
-      - 'sftp:'
-      - 'ftp:'
-      - 'onedrive:'
-      - 'dropbox:'
-      - 's3:'
-      - '--transfers'
-      - '--no-check-certificate'
-  selection_renamed:
-    CommandLine|contains:
-      - ' copy '
-      - '--transfers'
-      - '--no-check-certificate'
-    Image|contains:
-      - '\Temp\'
-      - '\AppData\'
-      - '\ProgramData\'
-  condition: selection_binary or (selection_args and not selection_binary) or selection_renamed
+  condition: selection and not filter_legit
 falsepositives:
-  - Legitimate Rclone use for cloud backup operations - verify destination
+  - Legitimate cloud sync tools with similar arguments (tune by parent process)
 level: high
