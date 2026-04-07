@@ -1,57 +1,35 @@
-title: INC Ransom - Domain Admin Account Scanning and Enumeration
-id: aa07bb08-cc09-4dd0-ee01-006600770aa
-status: experimental
-description: >
-  Detects domain administrator account enumeration as observed in INC Ransom
-  incidents. MITRE ATT&CK documents that INC Ransom specifically scans for
-  domain admin accounts after gaining initial access. This covers net.exe
-  queries for domain admins, PowerShell AD module enumeration, and AdFind
-  tool usage. Escalation to domain admin is the prerequisite for deploying
-  ransomware across a law firm network (T1069.002 / T1087.002).
-references:
-  - https://attack.mitre.org/groups/G1032/
-  - https://attack.mitre.org/techniques/T1069/002/
-author: VeilHunter - Legal Sector APT
-date: 2026-03-25
+title: INC Ransom - Domain Admin Reconnaissance
+id: f2a3b4c5-d6e7-8901-fabc-012345678901
+status: stable
+description: Detects domain administrator reconnaissance commands observed in
+  INC ransomware intrusions, used to identify privileged accounts before
+  lateral movement.
+author: jcube3ai
+date: 2026-04-07
 tags:
   - attack.discovery
   - attack.t1069.002
   - attack.t1087.002
-  - tlp:white
-  - actor:inc_ransom
-  - sector:legal
 logsource:
-  product: windows
   category: process_creation
+  product: windows
 detection:
-  selection_net_admins:
+  selection:
     Image|endswith:
       - '\net.exe'
       - '\net1.exe'
+      - '\nltest.exe'
+      - '\dsquery.exe'
+      - '\adfind.exe'
     CommandLine|contains:
-      - 'group'
       - 'domain admins'
-      - 'Domain Admins'
       - 'enterprise admins'
-      - 'schema admins'
-  selection_adfind:
-    Image|endswith: '\AdFind.exe'
-  selection_adfind_named:
-    CommandLine|contains:
-      - 'adfind'
-      - 'AdFind'
-    CommandLine|contains:
-      - 'objectcategory'
-      - 'cn=domain admins'
-  selection_powershell_ad:
-    Image|endswith:
-      - '\powershell.exe'
-      - '\pwsh.exe'
-    CommandLine|contains:
-      - 'Get-ADGroupMember'
-      - 'Domain Admins'
-      - 'net localgroup administrators'
-  condition: selection_net_admins or selection_adfind or selection_adfind_named or selection_powershell_ad
+      - 'domain controllers'
+      - '/dclist'
+      - '/trusted_domains'
+      - 'group "Domain Admins"'
+      - 'group "Enterprise Admins"'
+  condition: selection
 falsepositives:
-  - Legitimate AD administrators auditing group membership
-level: medium
+  - Legitimate IT admin scripts performing AD inventory
+level: high
