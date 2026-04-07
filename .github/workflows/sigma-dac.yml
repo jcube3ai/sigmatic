@@ -48,18 +48,26 @@ jobs:
       - name: Validate Sigma rule structure
         run: |
           echo "Validating Sigma rules with sigma-cli..."
-          find . -name "*.yml" \
+          ERROR_COUNT=0
+          while IFS= read -r rule; do
+            echo "→ Checking $rule"
+            result=$(sigma check "$rule" 2>&1) || true
+            echo "$result"
+            if echo "$result" | grep -qE "Found [1-9][0-9]* errors"; then
+              echo "❌ HARD ERROR in: $rule"
+              ERROR_COUNT=$((ERROR_COUNT + 1))
+            fi
+          done < <(find . -name "*.yml" \
             -not -path "./.github/*" \
             -not -name ".yamllint.yml" \
-            | sort | while read rule; do
-              echo "→ Checking $rule"
-              result=$(sigma check "$rule" 2>&1)
-              echo "$result"
-              if echo "$result" | grep -q "Found [1-9][0-9]* errors"; then
-                echo "❌ HARD ERROR in: $rule - failing pipeline"
-                exit 1
-              fi
-            done
+            | sort)
+          echo ""
+          echo "=== Validation Summary ==="
+          echo "Hard errors found: $ERROR_COUNT"
+          if [ $ERROR_COUNT -gt 0 ]; then
+            echo "❌ Pipeline failed due to $ERROR_COUNT hard rule error(s)"
+            exit 1
+          fi
           echo "✅ All Sigma rules passed validation."
 
       - name: Count rules by directory
