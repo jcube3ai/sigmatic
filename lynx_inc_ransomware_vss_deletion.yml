@@ -1,5 +1,5 @@
 title: Lynx / INC Ransomware - Shadow Copy Deletion Pre-Encryption
-id: ff03aa04-bb05-4cc0-dd06-00bb00cc0ff
+id: e5cc707b-babb-4672-8cfe-29c29e676791
 status: experimental
 description: >
   Detects shadow copy and backup deletion commands used by both Lynx
