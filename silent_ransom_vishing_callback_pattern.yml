@@ -17,7 +17,6 @@ tags:
   - attack.initial_access
   - attack.t1566.004
   - attack.t1219
-  - tlp.white
   - actor.silent_ransom_group
   - sector.legal
 logsource:
