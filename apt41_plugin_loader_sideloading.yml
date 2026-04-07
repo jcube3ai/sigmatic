@@ -17,9 +17,9 @@ tags:
   - attack.defense_evasion
   - attack.persistence
   - attack.t1574.002
-  - tlp:white
-  - actor:apt41
-  - sector:legal
+  - tlp.white
+  - actor.apt41
+  - sector.legal
 logsource:
   product: windows
   category: image_load
