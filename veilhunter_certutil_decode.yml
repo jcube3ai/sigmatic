@@ -1,5 +1,5 @@
 title: VeilHunter - Certutil Used to Decode or Download Content
-id: c9d0e1f2-0602-4a2b-6c7d-e289af9f0602
+id: 5cdf6656-0060-4ad1-9ab2-632c53832be8
 status: experimental
 description: >
   Detects certutil.exe being used to decode base64-encoded content or
