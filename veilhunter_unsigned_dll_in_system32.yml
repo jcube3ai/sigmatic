@@ -10,8 +10,6 @@ references:
 author: VeilHunter
 date: 2026-03-25
 tags:
-  - attack.defense_evasion
-  - attack.persistence
   - attack.t1574.001
 logsource:
   product: windows
