@@ -1,8 +1,8 @@
-sigma-cli
-pySigma-backend-splunk
-pySigma-backend-crowdstrike
-pySigma-backend-kusto
+pySigma==0.10.10
+sigma-cli==0.7.11
+pySigma-backend-splunk==0.3.7
+pySigma-backend-crowdstrike==0.1.1
 git+https://github.com/jcube3ai/pySigma-backend-cortexxdr.git
-pySigma-pipeline-windows
-pySigma-pipeline-sysmon
+pySigma-pipeline-windows==1.2.0
+pySigma-pipeline-sysmon==1.0.4
 yamllint
