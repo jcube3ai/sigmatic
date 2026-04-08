@@ -20,7 +20,7 @@ detection:
   selection:
     EventID: 4625
     LogonType: 10
-  condition: selection | count() by IpAddress > 5
+  condition: selection 
 timeframe: 5m
 falsepositives:
   - Misconfigured remote access clients, expired credentials
