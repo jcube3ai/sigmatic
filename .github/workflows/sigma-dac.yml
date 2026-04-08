@@ -146,7 +146,8 @@ jobs:
           mkdir -p output/xsiam
           echo "Converting to Cortex XSIAM XQL..."
           xargs sigma convert \
-            -t cortexxdr \
+            -t cortex_xdr \
+            --without-pipeline \
             --skip-unsupported \
             -o output/xsiam/sigmatic_xsiam.xql \
             < /tmp/rule_list.txt \
@@ -154,18 +155,20 @@ jobs:
             || echo "⚠️ XSIAM conversion had issues"
           touch output/xsiam/sigmatic_xsiam.xql
 
-      - name: Convert rules to Microsoft Sentinel KQL
+      - name: Convert rules to Elasticsearch EQL
         run: |
-          mkdir -p output/sentinel
-          echo "Converting to Microsoft Sentinel KQL..."
+          mkdir -p output/elastic
+          echo "Converting to Elasticsearch EQL..."
           xargs sigma convert \
-            -t kusto \
+            -t elasticsearch \
+            -f eql \
+            --without-pipeline \
             --skip-unsupported \
-            -o output/sentinel/sigmatic_sentinel.kql \
+            -o output/elastic/sigmatic_elastic.eql \
             < /tmp/rule_list.txt \
-            && echo "Sentinel: $(wc -l < output/sentinel/sigmatic_sentinel.kql) lines generated" \
-            || echo "⚠️ Sentinel conversion had issues"
-          touch output/sentinel/sigmatic_sentinel.kql
+            && echo "Elastic: $(wc -l < output/elastic/sigmatic_elastic.eql) lines generated" \
+            || echo "⚠️ Elastic conversion had issues"
+          touch output/elastic/sigmatic_elastic.eql
 
       - name: Generate conversion summary
         run: |
@@ -173,7 +176,7 @@ jobs:
           echo "" >> output/SUMMARY.md
           echo "| Platform | Output File | Lines |" >> output/SUMMARY.md
           echo "|----------|-------------|-------|" >> output/SUMMARY.md
-          for platform in splunk crowdstrike xsiam sentinel; do
+          for platform in splunk crowdstrike xsiam elastic; do
             file=$(ls output/$platform/ 2>/dev/null | head -1)
             if [ -f "output/$platform/$file" ] && [ -s "output/$platform/$file" ]; then
               lines=$(wc -l < "output/$platform/$file")
@@ -235,5 +238,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `## Sigmatic DaC Pipeline Results\n\n✅ Validation passed\n✅ Rules converted to SPL, CrowdStrike, XSIAM, KQL\n\n${summary}\n\n📦 Download converted rules from the [Actions artifacts](${context.payload.pull_request.html_url}/checks).`
+              body: `## Sigmatic DaC Pipeline Results\n\n✅ Validation passed\n✅ Rules converted to SPL, CrowdStrike, XSIAM, Elastic\n\n${summary}\n\n📦 Download converted rules from the [Actions artifacts](${context.payload.pull_request.html_url}/checks).`
             });
