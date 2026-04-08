@@ -6,7 +6,6 @@ description: Detects sc.exe invoked with purely numeric arguments, a pattern obs
 author: jcube3ai
 date: 2026-04-06
 tags:
-  - attack.defense_evasion
   - attack.t1562
 logsource:
   category: process_creation
