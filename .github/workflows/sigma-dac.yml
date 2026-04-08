@@ -140,7 +140,7 @@ jobs:
           mkdir -p output/sentinel
           echo "Converting to Microsoft Sentinel KQL..."
           xargs sigma convert \
-            -t microsoft365defender \
+            -t kusto \
             --without-pipeline \
             --skip-unsupported \
             -o output/sentinel/sigmatic_sentinel.kql \
@@ -152,7 +152,7 @@ jobs:
           mkdir -p output/xsiam
           echo "Converting to Cortex XSIAM XQL..."
           xargs sigma convert \
-            -t cortexxdr \
+            -t cortex_xdr \
             --without-pipeline \
             --skip-unsupported \
             -o output/xsiam/sigmatic_xsiam.xql \
