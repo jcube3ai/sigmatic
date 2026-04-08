@@ -10,8 +10,6 @@ references:
 author: VeilHunter
 date: 2026-03-25
 tags:
-  - attack.persistence
-  - attack.privilege_escalation
   - attack.t1546.012
 logsource:
   product: windows
