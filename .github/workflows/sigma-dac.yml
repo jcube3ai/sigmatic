@@ -162,18 +162,14 @@ jobs:
       - name: Convert rules to Cortex XSIAM XQL
         run: |
           mkdir -p output/xsiam
-          echo "Attempting XSIAM conversion..."
-          pip install pySigma-backend-cortexxdr \
-            --use-deprecated=legacy-resolver 2>&1 | tail -5
+          echo "Converting to Cortex XSIAM XQL..."
           xargs sigma convert \
             -t cortex_xdr \
             --without-pipeline \
             --skip-unsupported \
             -o output/xsiam/sigmatic_xsiam.xql \
-            < /tmp/rule_list.txt \
-            && echo "XSIAM: $(wc -l < output/xsiam/sigmatic_xsiam.xql) lines generated" \
-            || echo "⚠️ XSIAM conversion unavailable - backend incompatible with current pySigma version"
-          touch output/xsiam/sigmatic_xsiam.xql
+            < /tmp/rule_list.txt
+          echo "XSIAM: $(wc -l < output/xsiam/sigmatic_xsiam.xql) lines generated"
 
       - name: Generate conversion summary
         run: |
@@ -187,20 +183,21 @@ jobs:
               lines=$(wc -l < "output/$platform/$file")
               echo "| $platform | $file | $lines |" >> output/SUMMARY.md
             else
-              echo "| $platform | pending backend fix | 0 |" >> output/SUMMARY.md
+              echo "| $platform | no output | 0 |" >> output/SUMMARY.md
             fi
           done
           echo "" >> output/SUMMARY.md
           echo "Total rules: $(wc -l < /tmp/rule_list.txt)" >> output/SUMMARY.md
           cat output/SUMMARY.md
 
-      - name: Verify core artifacts are not empty
+      - name: Verify artifacts are not empty
         run: |
           echo "=== Output file sizes ==="
           find output/ -type f | xargs ls -lah
           for f in output/splunk/sigmatic_splunk.conf \
                    output/sentinel/sigmatic_sentinel.kql \
-                   output/crowdstrike/sigmatic_crowdstrike.spl; do
+                   output/crowdstrike/sigmatic_crowdstrike.spl \
+                   output/xsiam/sigmatic_xsiam.xql; do
             if [ ! -s "$f" ]; then
               echo "WARNING: $f is empty"
             else
@@ -247,5 +244,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `## Sigmatic DaC Pipeline Results\n\n✅ Validation passed\n✅ Rules converted to SPL, KQL, CrowdStrike LogScale\n\n${summary}\n\n📦 Download converted rules from the [Actions artifacts](${context.payload.pull_request.html_url}/checks).`
+              body: `## Sigmatic DaC Pipeline Results\n\n✅ Validation passed\n✅ Rules converted to SPL, KQL, CrowdStrike LogScale, XSIAM XQL\n\n${summary}\n\n📦 Download converted rules from the [Actions artifacts](${context.payload.pull_request.html_url}/checks).`
             });
