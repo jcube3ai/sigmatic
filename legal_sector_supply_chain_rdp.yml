@@ -11,7 +11,7 @@ description: >
 references:
   - https://www.halcyon.ai/ransomware-alerts/inc-ransom-group-mounts-rapid-campaign-against-law-firms
   - https://attack.mitre.org/techniques/T1199/
-author: VeilHunter - Legal Sector APT
+author: jcube3ai
 date: 2026-03-25
 tags:
   - attack.t1199
@@ -29,7 +29,7 @@ detection:
       - '192.168.'
       - '172.16.'
   condition: selection and not filter_approved_internal
-falsepositives: 
- -  Approved vendor remote access - validate against approved IP allowlist.
- -  Tune this rule by adding known vendor IP ranges to the filter.
+falsepositives:
+  - Approved vendor remote access - validate against approved IP allowlist
+  - Tune this rule by adding known vendor IP ranges to the filter
 level: medium
