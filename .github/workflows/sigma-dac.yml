@@ -35,16 +35,6 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt --use-deprecated=legacy-resolver
 
-      - name: Debug installed versions
-        run: |
-          echo "=== Key package versions ==="
-          pip show pySigma sigma-cli pySigma-backend-splunk \
-            pySigma-backend-crowdstrike pySigma-backend-cortexxdr \
-            2>/dev/null | grep -E "^Name|^Version"
-          echo ""
-          echo "=== Available backends ==="
-          sigma plugin list --plugin-type backend || true
-
       - name: Lint YAML syntax
         run: |
           echo "Running yamllint on all Sigma rules..."
@@ -150,13 +140,13 @@ jobs:
           mkdir -p output/crowdstrike
           echo "Converting to CrowdStrike Falcon LogScale..."
           xargs sigma convert \
-            -t log_scale \
+            -t crowdstrike \
             --without-pipeline \
             --skip-unsupported \
             -o output/crowdstrike/sigmatic_crowdstrike.spl \
             < /tmp/rule_list.txt \
             && echo "CrowdStrike: $(wc -l < output/crowdstrike/sigmatic_crowdstrike.spl) lines generated" \
-            || echo "⚠️ CrowdStrike target name may have changed - check debug output"
+            || echo "⚠️ CrowdStrike conversion had issues"
           touch output/crowdstrike/sigmatic_crowdstrike.spl
 
       - name: Convert rules to Cortex XSIAM XQL
@@ -164,13 +154,12 @@ jobs:
           mkdir -p output/xsiam
           echo "Converting to Cortex XSIAM XQL..."
           xargs sigma convert \
-            -t cortex_xdr \
-            --without-pipeline \
+            -t cortexxdr \
             --skip-unsupported \
             -o output/xsiam/sigmatic_xsiam.xql \
             < /tmp/rule_list.txt \
             && echo "XSIAM: $(wc -l < output/xsiam/sigmatic_xsiam.xql) lines generated" \
-            || echo "⚠️ XSIAM conversion had issues - check debug output"
+            || echo "⚠️ XSIAM conversion had issues"
           touch output/xsiam/sigmatic_xsiam.xql
 
       - name: Convert rules to Microsoft Sentinel KQL
@@ -184,7 +173,7 @@ jobs:
             -o output/sentinel/sigmatic_sentinel.kql \
             < /tmp/rule_list.txt \
             && echo "Sentinel: $(wc -l < output/sentinel/sigmatic_sentinel.kql) lines generated" \
-            || echo "⚠️ Sentinel target name may have changed - check debug output"
+            || echo "⚠️ Sentinel conversion had issues"
           touch output/sentinel/sigmatic_sentinel.kql
 
       - name: Generate conversion summary
@@ -255,5 +244,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `## Sigmatic DaC Pipeline Results\n\n✅ Validation passed\n✅ Rules converted to multiple platforms\n\n${summary}\n\n📦 Download converted rules from the [Actions artifacts](${context.payload.pull_request.html_url}/checks).`
+              body: `## Sigmatic DaC Pipeline Results\n\n✅ Validation passed\n✅ Rules converted to SPL, CrowdStrike, XSIAM, KQL\n\n${summary}\n\n📦 Download converted rules from the [Actions artifacts](${context.payload.pull_request.html_url}/checks).`
             });
