@@ -1,7 +1,6 @@
 sigma-cli
 pySigma-backend-splunk
 pySigma-backend-microsoft365defender
-pySigma-backend-cortexxdr
 pySigma-pipeline-windows
 pySigma-pipeline-sysmon
 yamllint
