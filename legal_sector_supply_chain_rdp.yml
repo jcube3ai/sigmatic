@@ -30,6 +30,6 @@ detection:
       - '172.16.'
   condition: selection and not filter_approved_internal
 falsepositives: 
- - Approved vendor remote access - validate against approved IP allowlist.
-  Tune this rule by adding known vendor IP ranges to the filter.
+ -  Approved vendor remote access - validate against approved IP allowlist.
+ -  Tune this rule by adding known vendor IP ranges to the filter.
 level: medium
