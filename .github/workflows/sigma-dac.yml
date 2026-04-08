@@ -115,14 +115,6 @@ jobs:
           echo "Found $(wc -l < /tmp/rule_list.txt) rules to convert"
           cat /tmp/rule_list.txt
 
-      - name: Debug available backends
-        run: |
-          echo "=== Installed backends ==="
-          sigma plugin list --plugin-type backend || true
-          echo ""
-          echo "=== Installed pipelines ==="
-          sigma plugin list --plugin-type pipeline || true
-
       - name: Convert rules to Splunk SPL
         run: |
           mkdir -p output/splunk
@@ -140,7 +132,7 @@ jobs:
           mkdir -p output/crowdstrike
           echo "Converting to CrowdStrike Falcon LogScale..."
           xargs sigma convert \
-            -t crowdstrike \
+            -t log_scale \
             --without-pipeline \
             --skip-unsupported \
             -o output/crowdstrike/sigmatic_crowdstrike.spl \
@@ -155,6 +147,7 @@ jobs:
           echo "Converting to Cortex XSIAM XQL..."
           xargs sigma convert \
             -t cortexxdr \
+            --without-pipeline \
             --skip-unsupported \
             -o output/xsiam/sigmatic_xsiam.xql \
             < /tmp/rule_list.txt \
