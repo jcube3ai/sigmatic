@@ -1,6 +1,7 @@
 sigma-cli
 pySigma-backend-splunk
 pySigma-backend-crowdstrike
+pySigma-backend-kusto
 git+https://github.com/jcube3ai/pySigma-backend-cortexxdr.git
 pySigma-pipeline-windows
 pySigma-pipeline-sysmon
