@@ -135,18 +135,6 @@ jobs:
             < /tmp/rule_list.txt
           echo "Splunk: $(wc -l < output/splunk/sigmatic_splunk.conf) lines generated"
 
-      - name: Convert rules to Microsoft Sentinel KQL
-        run: |
-          mkdir -p output/sentinel
-          echo "Converting to Microsoft Sentinel KQL..."
-          xargs sigma convert \
-            -t kusto \
-            --without-pipeline \
-            --skip-unsupported \
-            -o output/sentinel/sigmatic_sentinel.kql \
-            < /tmp/rule_list.txt
-          echo "Sentinel: $(wc -l < output/sentinel/sigmatic_sentinel.kql) lines generated"
-
       - name: Convert rules to CrowdStrike Falcon LogScale
         run: |
           mkdir -p output/crowdstrike
@@ -177,7 +165,7 @@ jobs:
           echo "" >> output/SUMMARY.md
           echo "| Platform | Output File | Lines |" >> output/SUMMARY.md
           echo "|----------|-------------|-------|" >> output/SUMMARY.md
-          for platform in splunk sentinel crowdstrike xsiam; do
+          for platform in splunk crowdstrike xsiam; do
             file=$(ls output/$platform/ 2>/dev/null | head -1)
             if [ -f "output/$platform/$file" ] && [ -s "output/$platform/$file" ]; then
               lines=$(wc -l < "output/$platform/$file")
@@ -195,7 +183,6 @@ jobs:
           echo "=== Output file sizes ==="
           find output/ -type f | xargs ls -lah
           for f in output/splunk/sigmatic_splunk.conf \
-                   output/sentinel/sigmatic_sentinel.kql \
                    output/crowdstrike/sigmatic_crowdstrike.spl \
                    output/xsiam/sigmatic_xsiam.xql; do
             if [ ! -s "$f" ]; then
@@ -244,5 +231,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `## Sigmatic DaC Pipeline Results\n\n✅ Validation passed\n✅ Rules converted to SPL, KQL, CrowdStrike LogScale, XSIAM XQL\n\n${summary}\n\n📦 Download converted rules from the [Actions artifacts](${context.payload.pull_request.html_url}/checks).`
+              body: `## Sigmatic DaC Pipeline Results\n\n✅ Validation passed\n✅ Rules converted to SPL, CrowdStrike LogScale, XSIAM XQL\n\n${summary}\n\n📦 Download converted rules from the [Actions artifacts](${context.payload.pull_request.html_url}/checks).`
             });
