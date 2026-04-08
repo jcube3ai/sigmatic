@@ -9,7 +9,6 @@ references:
 author: VeilHunter
 date: 2026-03-25
 tags:
-  - attack.persistence
   - attack.t1547.009
 logsource:
   product: windows
