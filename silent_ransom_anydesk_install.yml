@@ -14,12 +14,8 @@ references:
 author: VeilHunter - Legal Sector APT
 date: 2026-03-25
 tags:
-  - attack.initial_access
-  - attack.command_and_control
   - attack.t1219
   - attack.t1566.004
-  - actor.silent_ransom_group
-  - sector.legal
 logsource:
   product: windows
   category: process_creation
