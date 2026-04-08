@@ -10,7 +10,6 @@ references:
 author: VeilHunter
 date: 2026-03-25
 tags:
-  - attack.lateral_movement
   - attack.t1021.002
 logsource:
   product: windows
