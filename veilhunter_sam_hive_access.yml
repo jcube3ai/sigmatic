@@ -6,7 +6,6 @@ description: Detects suspicious access to the SAM registry hive, commonly used
 author: jcube3ai
 date: 2026-04-07
 tags:
-  - attack.credential_access
   - attack.t1003.002
 logsource:
   category: process_creation
