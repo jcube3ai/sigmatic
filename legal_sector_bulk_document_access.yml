@@ -20,8 +20,7 @@ detection:
       - '.docx'
       - '.pdf'
       - '.msg'
-  timeframe: 5m
-  condition: selection | count() > 50
+  condition: selection
 falsepositives:
   - Legitimate bulk export by authorized staff
 level: medium
