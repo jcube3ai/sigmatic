@@ -147,12 +147,12 @@ jobs:
             < /tmp/rule_list.txt
           echo "Sentinel: $(wc -l < output/sentinel/sigmatic_sentinel.kql) lines generated"
 
-      - name: Convert rules to CrowdStrike Falcon
+      - name: Convert rules to CrowdStrike Falcon LogScale
         run: |
           mkdir -p output/crowdstrike
           echo "Converting to CrowdStrike Falcon LogScale..."
           xargs sigma convert \
-            -t crowdstrike \
+            -t log_scale \
             --without-pipeline \
             --skip-unsupported \
             -o output/crowdstrike/sigmatic_crowdstrike.spl \
@@ -247,5 +247,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `## Sigmatic DaC Pipeline Results\n\n✅ Validation passed\n✅ Rules converted to SPL, KQL, CrowdStrike\n\n${summary}\n\n📦 Download converted rules from the [Actions artifacts](${context.payload.pull_request.html_url}/checks).`
+              body: `## Sigmatic DaC Pipeline Results\n\n✅ Validation passed\n✅ Rules converted to SPL, KQL, CrowdStrike LogScale\n\n${summary}\n\n📦 Download converted rules from the [Actions artifacts](${context.payload.pull_request.html_url}/checks).`
             });
