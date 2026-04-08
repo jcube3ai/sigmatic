@@ -147,25 +147,13 @@ jobs:
             < /tmp/rule_list.txt
           echo "Sentinel: $(wc -l < output/sentinel/sigmatic_sentinel.kql) lines generated"
 
-      - name: Convert rules to Cortex XDR / XSIAM XQL
-        run: |
-          mkdir -p output/xsiam
-          echo "Converting to Cortex XSIAM XQL..."
-          xargs sigma convert \
-            -t cortex_xdr \
-            --without-pipeline \
-            --skip-unsupported \
-            -o output/xsiam/sigmatic_xsiam.xql \
-            < /tmp/rule_list.txt
-          echo "XSIAM: $(wc -l < output/xsiam/sigmatic_xsiam.xql) lines generated"
-
       - name: Generate conversion summary
         run: |
           echo "## Conversion Summary" > output/SUMMARY.md
           echo "" >> output/SUMMARY.md
           echo "| Platform | Output File | Lines |" >> output/SUMMARY.md
           echo "|----------|-------------|-------|" >> output/SUMMARY.md
-          for platform in splunk sentinel xsiam; do
+          for platform in splunk sentinel; do
             file=$(ls output/$platform/ 2>/dev/null | head -1)
             if [ -f "output/$platform/$file" ]; then
               lines=$(wc -l < "output/$platform/$file")
@@ -183,8 +171,7 @@ jobs:
           echo "=== Output file sizes ==="
           find output/ -type f | xargs ls -lah
           for f in output/splunk/sigmatic_splunk.conf \
-                   output/sentinel/sigmatic_sentinel.kql \
-                   output/xsiam/sigmatic_xsiam.xql; do
+                   output/sentinel/sigmatic_sentinel.kql; do
             if [ ! -s "$f" ]; then
               echo "WARNING: $f is empty"
             else
@@ -231,5 +218,5 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `## Sigmatic DaC Pipeline Results\n\n✅ Validation passed\n✅ Rules converted to SPL, KQL, XQL\n\n${summary}\n\n📦 Download converted rules from the [Actions artifacts](${context.payload.pull_request.html_url}/checks).`
+              body: `## Sigmatic DaC Pipeline Results\n\n✅ Validation passed\n✅ Rules converted to SPL and KQL\n\n${summary}\n\n📦 Download converted rules from the [Actions artifacts](${context.payload.pull_request.html_url}/checks).`
             });
