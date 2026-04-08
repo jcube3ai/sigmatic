@@ -147,7 +147,6 @@ jobs:
           echo "Converting to Cortex XSIAM XQL..."
           xargs sigma convert \
             -t cortex_xdr \
-            --without-pipeline \
             --skip-unsupported \
             -o output/xsiam/sigmatic_xsiam.xql \
             < /tmp/rule_list.txt \
@@ -162,7 +161,7 @@ jobs:
           xargs sigma convert \
             -t elasticsearch \
             -f eql \
-            --without-pipeline \
+            -p ecs_windows \
             --skip-unsupported \
             -o output/elastic/sigmatic_elastic.eql \
             < /tmp/rule_list.txt \
